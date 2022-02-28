@@ -35,24 +35,23 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(Long userId , String deviceId) {
-//        RefreshToken refreshToken = new RefreshToken();
-//        Optional<RefreshToken> refreshTokenOPT = refreshTokenRepository.findRefreshTokenByUserIdAndDeviceId(userId, deviceId);
-//        refreshToken.setDeviceId(deviceId);
-//        if (refreshTokenOPT.isEmpty()) {
-//            return createRefreshToken(userId, refreshToken);
-//        } else {
-//            try {
-//                return verifyExpiration(refreshTokenOPT.get());
-//            } catch (BadCredentialsException e) {
-//                return createRefreshToken(userId, refreshToken);
-//            }
-//        }
-        return null;
+        RefreshToken refreshToken = new RefreshToken();
+        Optional<RefreshToken> refreshTokenOPT = refreshTokenRepository.findByUserIdAndDeviceId(userId, deviceId);
+        refreshToken.setDeviceId(deviceId);
+        if (refreshTokenOPT.isEmpty()) {
+            return createRefreshToken(userId, refreshToken);
+        } else {
+            try {
+                return verifyExpiration(refreshTokenOPT.get());
+            } catch (BadCredentialsException e) {
+                return createRefreshToken(userId, refreshToken);
+            }
+        }
     }
 
     private RefreshToken createRefreshToken(Long userId, RefreshToken refreshToken) {
         User userById = userRepository.getById(userId);
-        if (Objects.isNull(userId)){
+        if (Objects.isNull(userById)){
             throw  new BadCredentialsException("UserId doesn't exist");
         }
         refreshToken.setUserId(userId);

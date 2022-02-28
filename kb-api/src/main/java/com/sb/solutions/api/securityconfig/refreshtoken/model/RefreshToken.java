@@ -22,12 +22,13 @@ public class RefreshToken {
     private Long userId;
 
     @Column(nullable = false, unique = true)
+    @Lob
     private String token;
 
     @Column(nullable = false)
     private Instant expiryDate;
 
-    private String deviceId;
+    private String deviceId="def";
 
 }
 

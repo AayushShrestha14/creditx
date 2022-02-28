@@ -7274,8 +7274,59 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
 
+    <changeSet id="436-change-Access-token" author="abishek">
+        <modifyDataType tableName="access_token" columnName="device_id" newDataType="varchar(11)" />
+        <modifyDataType tableName="refresh_token" columnName="device_id" newDataType="varchar(11)" />
 
     </changeSet>
+
+
+    <changeSet id="437-modify-Access-token" author="abishek">
+        <modifyDataType tableName="access_token" columnName="access_token" newDataType="nVarChar(max)" />
+        <modifyDataType tableName="refresh_token" columnName="token" newDataType="nvarchar(max)" />
+    </changeSet>
+
+
+
+
+    <changeSet id="440-create-Access-token" author="abishek" >
+
+        <createTable tableName="access_token">
+            <column name="id" type="BIGINT" autoIncrement="true" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_id" type="varchar(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_token" type="nVARCHAR(max)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <createTable tableName="refresh_token">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"  />
+            </column>
+            <column name="token" type="nVARCHAR(max)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type ="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_id" type="varchar(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_date" type="DATE"  >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 
 </databaseChangeLog>

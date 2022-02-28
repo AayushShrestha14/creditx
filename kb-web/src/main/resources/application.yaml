@@ -8,7 +8,7 @@ spring:
   jmx:
     default-domain: las
   profiles:
-    active: century
+    active: qa
   thymeleaf:
     enabled: true
     check-template-location: true

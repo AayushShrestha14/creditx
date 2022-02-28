@@ -22,7 +22,7 @@ public class AccessToken {
 
     private Long userId;
 
-    private String deviceId;
+    private String deviceId="def";
 
     @Lob
     private String accessToken;

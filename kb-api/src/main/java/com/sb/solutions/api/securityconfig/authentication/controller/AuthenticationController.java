@@ -17,6 +17,7 @@ import com.sb.solutions.api.user.repository.UserRepository;
 import com.sb.solutions.core.validation.constraint.SbValid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -60,9 +61,10 @@ public class AuthenticationController {
     private final UserRepository userRepository;
 
 
-    @PostMapping("/token")
+    @PostMapping(path="/token",
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @SbValid(LOGIN_VALID_PARAMS)
-    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser( LoginRequest loginRequest) {
         Preconditions.checkNotNull(loginRequest);
         User user;
         try {
@@ -80,6 +82,10 @@ public class AuthenticationController {
         }
 
         String deviceId = loginRequest.getDeviceId();
+        if(Objects.isNull(deviceId)){
+            deviceId = "def";
+        }
+
         List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId() ,deviceId);
