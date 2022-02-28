@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
         final Authentication authentication = SecurityContextHolder.getContext()
             .getAuthentication();
         if (authentication.getPrincipal() instanceof UserDetails) {
-            User user = (User) authentication.getPrincipal();
+            UserDetails user = (UserDetails) authentication.getPrincipal();
             return this.getByUsername(user.getUsername());
         } else {
             logger.error("User not authenticated or invalid {}", authentication);

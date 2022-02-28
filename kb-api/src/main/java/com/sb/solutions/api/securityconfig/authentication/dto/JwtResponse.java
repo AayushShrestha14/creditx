@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 public class JwtResponse {
 
-    private String token;
-    private String type = "Bearer";
-    private String refreshToken;
+    private String access_token;
+    private String token_type = "Bearer";
+    private String refresh_token;
     private Long id;
     private String username;
     private String email;
@@ -21,8 +21,8 @@ public class JwtResponse {
 
 
     public JwtResponse(String accessToken, String refreshToken, String username, String email, List<String> roles) {
-        this.token = accessToken;
-        this.refreshToken = refreshToken;
+        this.access_token = accessToken;
+        this.refresh_token = refreshToken;
         this.username = username;
         this.email = email;
         this.roles = roles;

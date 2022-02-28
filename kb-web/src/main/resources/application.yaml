@@ -35,7 +35,7 @@ spring:
       fail-on-empty-beans: false
 
   liquibase:
-    change-log: classpath:/db/changelog/changelog-master.xml
+    change-log: classpath:/db/changelog/changelog-creditx-migration.xml
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
