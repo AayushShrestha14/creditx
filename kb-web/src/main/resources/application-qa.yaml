@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://202.166.201.235:1433;database=megav2_test
+    username: sa
+    password: sbdb@141
+  jpa:
+    show-sql: true
+

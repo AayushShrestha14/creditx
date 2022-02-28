@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="udpate-changeset-filepath-v0.2.0" author="msucil" runOnChange="true">
+    <sql>
+      <![CDATA[
+      UPDATE DATABASECHANGELOG
+      SET FILENAME = 'classpath:/db/changelog/release/v0.2.0-release.xml'
+      WHERE ID IN ('24-create-revinfo-table', '24-create-memo-type-audit')
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="24-create-revinfo-table" author="msucil">
+    <createTable tableName="revinfo">
+      <column name="rev" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" primaryKeyName="PK_revinfo_rev"/>
+      </column>
+      <column name="revtstmp" type="BIGINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet id="24-create-memo-type-audit" author="">
+    <createTable tableName="memo_type_audit">
+      <!--columns used to track revision and it's type-->
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <!-- column names tracked by @autdited -->
+      <column name="name" type="VARCHAR(255)"/>
+      <column name="status" type="INT"/>
+    </createTable>
+    <addPrimaryKey tableName="memo_type_audit" columnNames="id,rev"
+      constraintName="PK_memo_type_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="memo_type_audit" baseColumnNames="rev"
+      constraintName="FK_memo_type_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+</databaseChangeLog>

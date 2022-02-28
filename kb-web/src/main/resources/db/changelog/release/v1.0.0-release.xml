@@ -1,0 +1,1077 @@
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <!--  customer offer letter-->
+  <changeSet id="update-changeset-filepath-v1.0.0" author="msucil" runOnChange="true">
+    <sql>
+      <![CDATA[
+      UPDATE DATABASECHANGELOG
+      SET FILENAME = 'classpath:/db/changelog/release/v1.0.0-release.xml'
+      WHERE ID IN (
+      '2-offer_letter_stage',
+      '2-customer-offer-letter',
+      '2-customer-offer-letter-path',
+      '2-offer_letter_Path_customer_loan',
+      'alter-customer-loan-add-column',
+      '47-create-table-customer-document',
+      '49-create-table-customer-doc-path-customer-loan',
+      '50-add-proposal-tenure-duration',
+      '50-alter-customer-loan-add-expiry-date',
+      '50-alter-proposal-tenure-data-type-change',
+      '50-alter-customer-loan-add-expiry-date',
+      '51-create-credit-risk-grading-table',
+      '51-add-credit-risk-id-customer-loan',
+      '53-create-valuator-branch-join-table',
+      '53-valuator-drop-foreign-key-constraint-site-province-id',
+      '53-valuator-drop-column-site-province-id',
+      '53-valuator-drop-foreign-key-constraint-site-district-id',
+      '53-valuator-drop-column-site-district-id',
+      '53-valuator-drop-foreign-key-constraint-site-municipality-vdc-id',
+      '53-valuator-drop-column-site-municipality-vdc-id',
+      '53-valuator-drop-column-site-street-name',
+      '53-valuator-drop-column-site-ward-number',
+      '53-alter-valuator-add-email',
+      '53-alter-valuator-add-valuating-field',
+      '53-alter-valuator-add-bank-associate-date',
+      '53-alter-valuator-add-min-amount',
+      '53-alter-valuator-add-max-amount',
+      '53-alter-valuator-add-inactive-comment',
+      '54-remove-user-account-number',
+      '52-audit-users-table',
+      '57-audit-customer-loan',
+      '57-audit-customer',
+      '57-audit-site-visit',
+      '57-audit-role',
+      '57-audit-loan-stage',
+      '57-audit-proposal',
+      '57-audit-financial',
+      '57-audit-security',
+      '57-audit-credit-risk-grading',
+      '57-audit-customer-document',
+      '57-audit-customer-document-Path-customer-loan',
+      '57-audit-customer-relative',
+      '57-audit-customer-relative',
+      '57-audit-customer-customer-relatives',
+      '57-audit-legal-status',
+      '57-audit-capital',
+      '57-audit-swot',
+      '57-audit-management-team',
+      '57-audit-proprietor',
+      '57-audit-company-info',
+      '58-alter-branch-add-email',
+      '58-alter-branch-add-landline-number')
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="2-offer_letter_stage" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="offer_letter_stage"/>
+      </not>
+    </preConditions>
+    <createTable tableName="offer_letter_stage">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="comment" type="LONGTEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="from_user_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_from_user_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="to_user_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_to_user_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+
+      <column name="from_role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_from_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="to_role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_to_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="doc_action" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2-customer-offer-letter" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="customer_offer_letter"/>
+      </not>
+    </preConditions>
+    <createTable tableName="customer_offer_letter">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="is_offer_letter_issued" type="BOOLEAN" defaultValue="false">
+      </column>
+      <column name="doc_status" type="BIGINT" defaultValueNumeric="0">
+      </column>
+      <column name="is_offer_letter_approved" type="BOOLEAN" defaultValue="false">
+      </column>
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_customer_offer_letter_id"
+          referencedTableName="customer_loan"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="offer_letter_stage_list" type="LONGTEXT">
+      </column>
+      <column name="offer_letter_stage_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_offer_letter_stage_id"
+          referencedTableName="offer_letter_stage"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_offer_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_offer_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2-customer-offer-letter-path" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="customer_offer_letter_path"/>
+      </not>
+    </preConditions>
+    <createTable tableName="customer_offer_letter_path">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="path" type="VARCHAR(256)">
+      </column>
+      <column name="initial_information" type="LONGTEXT">
+      </column>
+      <column name="supported_information" type="LONGTEXT">
+      </column>
+      <column name="offer_letter_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_offer_letter_id"
+          referencedTableName="offer_letter"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_offer_letter_path_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer-offer_letter_path_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2-offer_letter_Path_customer_loan" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="offer_letter_Path_customer_loan"/>
+      </not>
+    </preConditions>
+    <createTable tableName="offer_letter_Path_customer_loan">
+      <column name="customer_offer_letter_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_letter_customer_loan_id"
+          referencedTableName="customer_offer_letter"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="customer_offer_letter_path_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_letter_customer_loan_path_id"
+          referencedTableName="customer_offer_letter_path"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="alter-customer-loan-add-column" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="customer_offer_letter_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="customer_offer_letter_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_offer_id"
+          referencedTableName="customer_offer_letter"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="47-create-table-customer-document" author="yunish">
+    <createTable tableName="customer_document">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="document_path" type="VARCHAR(256)"/>
+      <column name="document_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_document_id"
+          referencedTableName="document"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints foreignKeyName="fk_customer_loan_document"
+          referencedTableName="customer_loan"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_document_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_document_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+
+  </changeSet>
+
+  <changeSet id="49-create-table-customer-doc-path-customer-loan" author="yunish">
+    <createTable tableName="customer_document_Path_customer_loan">
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_document_customer_loan_id"
+          referencedTableName="customer_loan"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="customer_document_id" type="BIGINT">
+        <constraints foreignKeyName="fk_customer_document_id"
+          referencedTableName="customer_document"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="50-add-proposal-tenure-duration" author="Aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="proposal" columnName="tenure_duration_in_months"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="proposal">
+      <column name="tenure_duration_in_months" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="50-alter-proposal-tenure-data-type-change" author="Aabishkar">
+    <modifyDataType
+      columnName="tenure_duration_in_months"
+      newDataType="DOUBLE"
+      tableName="proposal"/>
+  </changeSet>
+
+  <changeSet id="50-alter-customer-loan-add-expiry-date" author="Aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="expiry_date"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="expiry_date" type="DATE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="51-create-credit-risk-grading-table" author="yunish">
+    <createTable tableName="credit_risk_grading">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="data" type="LONGTEXT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_credit_risk_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_credit_risk_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="51-add-credit-risk-id-customer-loan" author="yunish">
+    <addColumn
+      tableName="customer_loan">
+      <column name="credit_risk_grading_id" type="BIGINT"/>
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="credit_risk_grading_id"
+      baseTableName="customer_loan"
+      constraintName="fk_customer_loan_credit_risk_grading_id"
+      referencedColumnNames="id"
+      referencedTableName="credit_risk_grading"/>
+  </changeSet>
+
+  <changeSet id="53-create-valuator-branch-join-table" author="Amulya">
+    <createTable tableName="valuator_branch">
+
+      <column name="valuator_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_valuator_valuator_id"
+          referencedTableName="valuator"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="branch_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_branch_valuator_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-foreign-key-constraint-site-province-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="fk_valuator_site_province_id"
+        foreignKeyTableName="valuator"/>
+    </preConditions>
+    <dropForeignKeyConstraint baseTableName="valuator"
+      constraintName="fk_valuator_site_province_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-column-site-province-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="valuator" columnName="site_province_id"/>
+    </preConditions>
+    <dropColumn tableName="valuator" columnName="site_province_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-foreign-key-constraint-site-district-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="fk_valuator_site_district_id"
+        foreignKeyTableName="valuator"/>
+    </preConditions>
+    <dropForeignKeyConstraint baseTableName="valuator"
+      constraintName="fk_valuator_site_district_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-column-site-district-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="valuator" columnName="site_district_id"/>
+    </preConditions>
+    <dropColumn tableName="valuator" columnName="site_district_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-foreign-key-constraint-site-municipality-vdc-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="fk_valuator_site_municipality_vdc_id"
+        foreignKeyTableName="valuator"/>
+    </preConditions>
+    <dropForeignKeyConstraint baseTableName="valuator"
+      constraintName="fk_valuator_site_municipality_vdc_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-column-site-municipality-vdc-id" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="valuator" columnName="site_municipality_vdc_id"/>
+    </preConditions>
+    <dropColumn tableName="valuator" columnName="site_municipality_vdc_id"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-column-site-street-name" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="valuator" columnName="site_street_name"/>
+    </preConditions>
+    <dropColumn tableName="valuator" columnName="site_street_name"/>
+  </changeSet>
+
+  <changeSet id="53-valuator-drop-column-site-ward-number" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="valuator" columnName="site_ward_number"/>
+    </preConditions>
+    <dropColumn tableName="valuator" columnName="site_ward_number"/>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-email" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="email"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="email" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-valuating-field" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="valuating_field"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="valuating_field" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-bank-associate-date" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="bank_associate_date"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="bank_associate_date" type="DATE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-min-amount" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="min_amount"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="min_amount" type="DECIMAL"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-max-amount" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="max_amount"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="max_amount" type="DECIMAL"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="53-alter-valuator-add-inactive-comment" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="inactive_comment"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="inactive_comment" type="LONGTEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="54-remove-user-account-number" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="users" columnName="account_no"/>
+    </preConditions>
+    <dropColumn tableName="users" columnName="account_no"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="52-audit-users-table">
+    <createTable tableName="users_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="name" type="VARCHAR(256)"/>
+      <column name="user_name" type="VARCHAR(256)"/>
+      <column name="email" type="VARCHAR(256)"/>
+      <column name="status" type="INT"/>
+      <column name="role_id" type="BIGINT"/>
+      <column name="signature_image" type="VARCHAR(256)"/>
+    </createTable>
+    <addPrimaryKey tableName="users_audit" columnNames="id,rev"
+      constraintName="PK_users_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="users_audit" baseColumnNames="rev"
+      constraintName="FK_users_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-loan">
+    <createTable tableName="customer_loan_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="customer_info_id" type="BIGINT"/>
+      <column name="loan_id" type="BIGINT"/>
+      <column name="company_info_id" type="BIGINT"/>
+      <column name="loan_type" type="INT"/>
+      <column name="document_status" type="INT"/>
+      <column name="loan_category" type="BIGINT"/>
+      <column name="site_visit_id" type="BIGINT"/>
+      <column name="current_stage_id" type="BIGINT"/>
+      <column name="branch_id" type="BIGINT"/>
+      <column name="offer_letter_url" type="VARCHAR(100)"/>
+      <column name="proposal_id" type="BIGINT"/>
+      <column name="financial_id" type="BIGINT"/>
+      <column name="security_id" type="BIGINT"/>
+      <column name="previous_stage_list" type="LONGTEXT"/>
+      <column name="credit_risk_grading_id" type="BIGINT"/>
+    </createTable>
+    <addPrimaryKey tableName="customer_loan_audit" columnNames="id,rev"
+      constraintName="PK_customer_loan_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_loan_audit" baseColumnNames="rev"
+      constraintName="FK_customer_loan_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer">
+    <createTable tableName="customer_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="title" type="VARCHAR(256)"/>
+      <column name="customer_name" type="VARCHAR(256)"/>
+      <column name="account_no" type="VARCHAR(256)"/>
+      <column name="province_id" type="BIGINT"/>
+      <column name="district_id" type="BIGINT"/>
+      <column name="municipalities_id" type="BIGINT"/>
+      <column name="street" type="VARCHAR(256)"/>
+      <column name="ward_number" type="VARCHAR(256)"/>
+      <column name="email" type="VARCHAR(256)"/>
+      <column name="initial_relation_date" type="DATE"/>
+      <column name="citizenship_number" type="VARCHAR(256)"/>
+      <column name="citizenship_issued_date" type="DATE"/>
+      <column name="citizenship_issued_place" type="VARCHAR(256)"/>
+      <column name="status" type="INT"/>
+      <column name="contact_number" type="VARCHAR(256)"/>
+      <column name="occupation" type="VARCHAR(256)"/>
+      <column name="income_source" type="VARCHAR(256)"/>
+      <column name="dob" type="DATE"/>
+    </createTable>
+    <addPrimaryKey tableName="customer_audit" columnNames="id,rev"
+      constraintName="PK_customer_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_audit" baseColumnNames="rev"
+      constraintName="FK_customer_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-site-visit">
+    <createTable tableName="site_visit_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+    <addPrimaryKey tableName="site_visit_audit" columnNames="id,rev"
+      constraintName="PK_site_visit_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="site_visit_audit" baseColumnNames="rev"
+      constraintName="FK_site_visit_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-role">
+    <createTable tableName="role_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="role_name" type="VARCHAR(256)"/>
+      <column name="status" type="INT"/>
+      <column name="role_type" type="INT"/>
+      <column name="role_access" type="INT"/>
+    </createTable>
+    <addPrimaryKey tableName="role_audit" columnNames="id,rev"
+      constraintName="PK_role_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="role_audit" baseColumnNames="rev"
+      constraintName="FK_role_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-loan-stage">
+    <createTable tableName="loan_stage_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="comment" type="LONGTEXT"/>
+      <column name="from_user_id" type="BIGINT"/>
+      <column name="to_user_id" type="BIGINT"/>
+      <column name="from_role_id" type="BIGINT"/>
+      <column name="to_role_id" type="BIGINT"/>
+      <column name="doc_action" type="INT"/>
+    </createTable>
+    <addPrimaryKey tableName="loan_stage_audit" columnNames="id,rev"
+      constraintName="PK_loan_stage_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="loan_stage_audit" baseColumnNames="rev"
+      constraintName="FK_loan_stage_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-proposal">
+    <createTable tableName="proposal_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="data" type="LONGTEXT"/>
+      <column name="proposed_limit" type="DECIMAL"/>
+      <column name="tenure_duration_in_months" type="DOUBLE"/>
+    </createTable>
+    <addPrimaryKey tableName="proposal_audit" columnNames="id,rev"
+      constraintName="PK_proposal_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="proposal_audit" baseColumnNames="rev"
+      constraintName="FK_proposal_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-financial">
+    <createTable tableName="financial_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+    <addPrimaryKey tableName="financial_audit" columnNames="id,rev"
+      constraintName="PK_financial_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="financial_audit" baseColumnNames="rev"
+      constraintName="FK_financial_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-security">
+    <createTable tableName="security_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+    <addPrimaryKey tableName="security_audit" columnNames="id,rev"
+      constraintName="PK_security_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="security_audit" baseColumnNames="rev"
+      constraintName="FK_security_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-credit-risk-grading">
+    <createTable tableName="credit_risk_grading_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+    <addPrimaryKey tableName="credit_risk_grading_audit" columnNames="id,rev"
+      constraintName="PK_credit_risk_grading_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="credit_risk_grading_audit" baseColumnNames="rev"
+      constraintName="FK_credit_risk_grading_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-document">
+    <createTable tableName="customer_document_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="document_path" type="VARCHAR(256)"/>
+      <column name="document_id" type="BIGINT"/>
+    </createTable>
+    <addPrimaryKey tableName="customer_document_audit" columnNames="id,rev"
+      constraintName="PK_customer_document_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_document_audit" baseColumnNames="rev"
+      constraintName="FK_customer_document_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-document-Path-customer-loan">
+    <createTable tableName="customer_document_Path_customer_loan_audit">
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="customer_document_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="customer_document_Path_customer_loan_audit"
+      columnNames="customer_loan_id,customer_document_id,rev"
+      constraintName="PK_customer_document_Path_customer_loan_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_document_Path_customer_loan_audit"
+      baseColumnNames="rev"
+      constraintName="FK_customer_document_Path_customer_loan_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-relative">
+    <createTable tableName="customer_relative_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="title" type="VARCHAR(256)"/>
+      <column name="customer_relation" type="VARCHAR(256)"/>
+      <column name="customer_relative_name" type="VARCHAR(256)"/>
+      <column name="citizenship_number" type="VARCHAR(256)"/>
+      <column name="citizenship_issued_date" type="DATE"/>
+      <column name="citizenship_issued_place" type="VARCHAR(256)"/>
+    </createTable>
+    <addPrimaryKey tableName="customer_relative_audit" columnNames="id,rev"
+      constraintName="PK_customer_relative_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_relative_audit" baseColumnNames="rev"
+      constraintName="FK_customer_relative_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-relative">
+    <createTable tableName="customer_relative_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="title" type="VARCHAR(256)"/>
+      <column name="customer_relation" type="VARCHAR(256)"/>
+      <column name="customer_relative_name" type="VARCHAR(256)"/>
+      <column name="citizenship_number" type="VARCHAR(256)"/>
+      <column name="citizenship_issued_date" type="DATE"/>
+      <column name="citizenship_issued_place" type="VARCHAR(256)"/>
+    </createTable>
+    <addPrimaryKey tableName="customer_relative_audit" columnNames="id,rev"
+      constraintName="PK_customer_relative_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_relative_audit" baseColumnNames="rev"
+      constraintName="FK_customer_relative_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-customer-customer-relatives">
+    <createTable tableName="customer_customer_relatives_audit">
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="customer_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="customer_relatives_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="customer_customer_relatives_audit"
+      columnNames="customer_id,customer_relatives_id,rev"
+      constraintName="PK_customer_customer_relatives_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="customer_customer_relatives_audit" baseColumnNames="rev"
+      constraintName="FK_customer_customer_relatives_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-legal-status">
+    <createTable tableName="legal_status_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="corporate_structure" type="VARCHAR(256)"/>
+      <column name="registered_office" type="VARCHAR(256)"/>
+      <column name="registered_under_act" type="VARCHAR(256)"/>
+      <column name="registration_date" type="DATE"/>
+      <column name="pan_registration_office" type="VARCHAR(256)"/>
+      <column name="pan_registration_date" type="DATE"/>
+    </createTable>
+    <addPrimaryKey tableName="legal_status_audit" columnNames="id,rev"
+      constraintName="PK_legal_status_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="legal_status_audit" baseColumnNames="rev"
+      constraintName="FK_legal_status_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-capital">
+    <createTable tableName="capital_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="authorized_capital" type="DOUBLE"/>
+      <column name="paid_up_capital" type="DOUBLE"/>
+      <column name="issued_capital" type="DOUBLE"/>
+      <column name="total_capital" type="DOUBLE"/>
+      <column name="fixed_capital" type="DOUBLE"/>
+      <column name="working_capital" type="DOUBLE"/>
+      <column name="number_of_shareholder" type="INT"/>
+    </createTable>
+    <addPrimaryKey tableName="capital_audit" columnNames="id,rev"
+      constraintName="PK_capital_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="capital_audit" baseColumnNames="rev"
+      constraintName="FK_capital_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-swot">
+    <createTable tableName="swot_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="strength" type="VARCHAR(256)"/>
+      <column name="weakness" type="VARCHAR(256)"/>
+      <column name="opportunity" type="VARCHAR(256)"/>
+      <column name="threats" type="VARCHAR(256)"/>
+    </createTable>
+    <addPrimaryKey tableName="swot_audit" columnNames="id,rev"
+      constraintName="PK_swot_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="swot_audit" baseColumnNames="rev"
+      constraintName="FK_swot_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-management-team">
+    <createTable tableName="management_team_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="name" type="VARCHAR(256)"/>
+      <column name="description" type="LONGTEXT"/>
+      <column name="designation" type="VARCHAR(256)"/>
+    </createTable>
+    <addPrimaryKey tableName="management_team_audit" columnNames="id,rev"
+      constraintName="PK_management_team_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="management_team_audit" baseColumnNames="rev"
+      constraintName="FK_management_team_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-proprietor">
+    <createTable tableName="proprietor_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="name" type="VARCHAR(256)"/>
+      <column name="contact_no" type="VARCHAR(256)"/>
+      <column name="province_id" type="BIGINT"/>
+      <column name="district_id" type="BIGINT"/>
+      <column name="municipality_vdc_id" type="BIGINT"/>
+      <column name="share" type="DOUBLE"/>
+    </createTable>
+    <addPrimaryKey tableName="proprietor_audit" columnNames="id,rev"
+      constraintName="PK_proprietor_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="proprietor_audit" baseColumnNames="rev"
+      constraintName="FK_proprietor_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="57-audit-company-info">
+    <createTable tableName="company_info_audit">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="company_name" type="VARCHAR(256)"/>
+      <column name="registration_number" type="VARCHAR(256)"/>
+      <column name="establishment_date" type="DATE"/>
+      <column name="business_type" type="INT"/>
+      <column name="pan_number" type="VARCHAR(256)"/>
+      <column name="legal_status_id" type="INT"/>
+      <column name="capital_id" type="INT"/>
+      <column name="swot_id" type="INT"/>
+    </createTable>
+    <addPrimaryKey tableName="company_info_audit" columnNames="id,rev"
+      constraintName="PK_company_info_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="company_info_audit" baseColumnNames="rev"
+      constraintName="FK_company_info_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+
+    <createTable tableName="company_info_management_team_list_audit">
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="company_info_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="management_team_list_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="company_info_management_team_list_audit"
+      columnNames="company_info_id,management_team_list_id,rev"
+      constraintName="PK_company_info_management_team_list_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="company_info_management_team_list_audit"
+      baseColumnNames="rev"
+      constraintName="FK_company_info_management_team_list_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+
+    <createTable tableName="company_info_proprietors_list_audit">
+      <column name="rev" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="company_info_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="proprietors_list_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="company_info_proprietors_list_audit"
+      columnNames="company_info_id,proprietors_list_id,rev"
+      constraintName="PK_company_info_proprietors_list_audit_id_rev"/>
+    <addForeignKeyConstraint baseTableName="company_info_proprietors_list_audit"
+      baseColumnNames="rev"
+      constraintName="FK_company_info_proprietors_list_audit_rev_revinfo_rev"
+      referencedTableName="revinfo" referencedColumnNames="rev"/>
+  </changeSet>
+
+  <changeSet id="58-alter-branch-add-email" author="sujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="branch" columnName="email"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="branch">
+      <column name="email" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="58-alter-branch-add-landline-number" author="sujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="branch" columnName="landline_number"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="branch">
+      <column name="landline_number" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

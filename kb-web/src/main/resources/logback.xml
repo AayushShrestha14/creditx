@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <property name="log.dir" value="C:/logs"/>
+  <property name="default-pattern"
+    value="%logger{36} %d{yyyy-MM-dd-HH:mm:ss} %level [%thread] %msg%n"/>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%msg%n</Pattern>
+    </layout>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
+    name="ROOT_LOGGER">
+    <file>${log.dir}/century-las.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>
+        ${log.dir}/lasv2.%i.log.zip
+      </fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>10</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy
+      class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>5MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>${default-pattern}</pattern>
+    </encoder>
+  </appender>
+
+  <root>
+    <level value="INFO"/>
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="ROOT_LOGGER"/>
+  </root>
+  <!-- loggin for connection-->
+  <appender name="connectionRollingFile"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${log.dir}/conn/connection.log</file>
+    <encoder
+      class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+    </encoder>
+
+    <rollingPolicy
+      class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily and when the file reaches 5 MegaBytes -->
+      <fileNamePattern>${log.dir}/conn/archived/connection-%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>1MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+  <logger name="com.zaxxer.hikari" level="debug" additivity="false">
+    <appender-ref ref="connectionRollingFile"/>
+  </logger>
+</configuration>

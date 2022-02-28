@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://150.107.205.62:1433;database=local_db
+    username: sa
+    password: sbdb@141

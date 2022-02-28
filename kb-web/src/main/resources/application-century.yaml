@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://202.166.201.235:1433;database=century_db_v2
+    username: sa
+    password: sbdb@141
+
+bank:
+  affiliateId: century
+  name: Century Commercial Bank Ltd.
+  website: http://www.centurybank.com.np/
+  frontaddress: "http://localhost:4200/"
+
+
+product:
+  las: true
+  offerletter: true
+  memo: false
+  account: false
+  eligibility: true
+  dms: false
+  nepTemplate: false
+  cadLiteVersion: false
+  loanApprovalHierarchyLevel: LOAN #DEAFULT = Disable Approval Hierarchy, LOAN_TYPE = Enable Approval Hierarchy for loan type, LOAN = Enable Role Hierarchy for loan
+  fullCad: true #only fullCad should not be enable. you should enable offerLetter also
+  cbsEnable: false
+  checklistLiteVersion: true
+  microLoan: true
+  customerBaseLoan : true
+  configureLegalDocument: true #set true if check if checklistLiteVersion is true and config in cad dashboard by cad

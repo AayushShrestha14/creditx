@@ -1,0 +1,1416 @@
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="update-change-set-filepath-v2.0.0" author="elvin" runOnChange="true">
+    <sql>
+      <![CDATA[
+      UPDATE DATABASECHANGELOG
+      SET FILENAME = 'classpath:/db/changelog/release/v2.0.0-release.xml'
+      WHERE ID IN (
+      '55-alter-nepse-add-field-company_code',
+      '55-alter-nepse-add-field-shareType',
+      '59-create-shareValue-table',
+      '61-create-loan-config-enhance',
+      '61-create-loan-config-enhance-loan-config-id-constraint',
+      '61-create-loan-config-enhance-enhance-id-constraint',
+      '61-create-loan-config-partial-settlement',
+      '61-create-loan-config-partial-settlement-loan-config-id-constraint',
+      '61-create-loan-config-partial-settlement-partial-settlement-id-constraint',
+      '61-create-loan-config-full-settlement',
+      '61-create-loan-config-full-settlement-loan-config-id-constraint',
+      '61-create-loan-config-full-settlement-full-settlement-id-constraint',
+      '13-alter-valuator-add-state',
+      '13-alter-customer-add-profile_pic',
+      '44-add-authorization-table',
+      '44-add-seed-data',
+      '63-rename-customer-document-Path-customer-loan',
+      '63-rename-customer-document-Path-customer-loan-audit',
+      '63-offer-letter-Path-customer-loan',
+      '64-alter-branch-add-column-location-preview',
+      '62-create-groups',
+      '112-alter-customer-loan-add-groups',
+      '60-base-interest',
+      '112-alter-customer-remove-account-no',
+      '67-create-vehicle-security',
+      '67-alter-customer-loan-add-vehicle-security',
+      '65-add-table-share_security',
+      'share-security-alter-66',
+      'share-customer-data-table-71',
+      'share-customer-data-third-table-72',
+      '75-create-vehicle-security-valuator',
+      '75-create-vehicle-security-valuator-list',
+      '75-alter-vehicle-security-valuator',
+      '75-alter-vehicle-security-valuator-remove-data',
+      '68-alter-guarantor-remove-column',
+      '69-alter-guarantor-add-column',
+      '70-add-third-table-security-guarantor',
+      '73-alter-security-add-valuator-id',
+      '81-create-groups-valuator',
+      '82-create-nepali-template',
+      '82-create-customer-loan-nepali-templates',
+      '82-alter-customer-add-nepali-detail',
+      '82-alter-customer-audit-add-nepali-detail',
+      '82-drop-customer_loan_nepali_templates',
+      '82-alter-nepali_template',
+      '83-alter-customer_loan',
+      'approval-role-hierarchy',
+      '84-create-maw-credit-risk-grading',
+      '84-alter-customer-loan-add-maw-credit-risk-grading',
+      '85-create-dealer',
+      '86-create-branch-dealers',
+      '87-alter-customer-loan-add-ref-no',
+      '88-alter-customer-loan-dealer-id',
+      '89-alter-customer-loan-add-remarks',
+      '89-alter-customer-loan-add-lowCreditScore',
+      '90-create-blacklist',
+      '91-remove-security-guarantor',
+      '92-remove-customer-customerId',
+      '92-remove-customer-title',
+      '93-create-guarantor-detail',
+      '93-alter-customer-loan-add-guarantor-id',
+      '93-create-guarantor_detail_guarantor_list')
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="55-alter-nepse-add-field-company_code" author="bibas">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="nepse_company" columnName="company_code"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="nepse_company">
+      <column name="company_Code" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet id="55-alter-nepse-add-field-shareType" author="bibas">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="nepse_company" columnName="share_type"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="nepse_company">
+      <column name="share_type" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="59-create-shareValue-table" author="bibash">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="share_value"/>
+      </not>
+    </preConditions>
+    <createTable tableName="share_value">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_share_value_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_share_value_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="share_data" type="varchar(256)">
+      </column>
+      <column name="status" type="BIGINT">
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <!-- Enhance change set start-->
+  <changeSet id="61-create-loan-config-enhance" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="loan_config_enhance"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="loan_config_enhance">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="enhance_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-enhance-loan-config-id-constraint" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_enhance"
+          foreignKeyName="fk_loan_config_enhance_loan_config_id"/>
+      </not>
+    </preConditions>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_enhance"
+      constraintName="fk_loan_config_enhance_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-enhance-enhance-id-constraint" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_enhance"
+          foreignKeyName="fk_loan_config_enhance_enhance_id"/>
+      </not>
+    </preConditions>
+    <addForeignKeyConstraint baseColumnNames="enhance_id"
+      baseTableName="loan_config_enhance"
+      constraintName="fk_loan_config_enhance_enhance_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="document"/>
+  </changeSet>
+  <!-- Enhance change set end-->
+
+  <!-- Partial Settlement change set start-->
+  <changeSet id="61-create-loan-config-partial-settlement" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="loan_config_partial_settlement"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="loan_config_partial_settlement">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="partial_settlement_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-partial-settlement-loan-config-id-constraint" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_partial_settlement"
+          foreignKeyName="fk_loan_config_partial_settlement_loan_config_id"/>
+      </not>
+    </preConditions>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_partial_settlement"
+      constraintName="fk_loan_config_partial_settlement_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-partial-settlement-partial-settlement-id-constraint"
+    author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_partial_settlement"
+          foreignKeyName="fk_loan_config_partial_settlement_partial_settlement_id"/>
+      </not>
+    </preConditions>
+    <addForeignKeyConstraint baseColumnNames="partial_settlement_id"
+      baseTableName="loan_config_partial_settlement"
+      constraintName="fk_loan_config_partial_settlement_partial_settlement_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="document"/>
+  </changeSet>
+  <!-- Partial Settlement change set end-->
+
+  <!-- Full Settlement change set start-->
+  <changeSet id="61-create-loan-config-full-settlement" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="loan_config_full_settlement"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="loan_config_full_settlement">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="full_settlement_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-full-settlement-loan-config-id-constraint" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_full_settlement"
+          foreignKeyName="fk_loan_config_full_settlement_loan_config_id"/>
+      </not>
+    </preConditions>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_full_settlement"
+      constraintName="fk_loan_config_full_settlement_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+  </changeSet>
+
+  <changeSet id="61-create-loan-config-full-settlement-full-settlement-id-constraint"
+    author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="loan_config_full_settlement"
+          foreignKeyName="fk_loan_config_full_settlement_full_settlement_id"/>
+      </not>
+    </preConditions>
+    <addForeignKeyConstraint baseColumnNames="full_settlement_id"
+      baseTableName="loan_config_full_settlement"
+      constraintName="fk_loan_config_full_settlement_full_settlement_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="document"/>
+  </changeSet>
+
+  <changeSet id="13-alter-valuator-add-state" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="valuator" columnName="state"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="valuator">
+      <column name="state" type="INT"/>
+    </addColumn>
+  </changeSet>
+  <!-- Full Settlement change set end-->
+
+  <changeSet id="13-alter-customer-add-profile_pic" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer" columnName="profile_pic"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer">
+      <column name="profile_pic" type="varchar(100)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="44-add-authorization-table" author="msucil">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="authorization"/>
+      </not>
+    </preConditions>
+    <createTable tableName="authorization">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="value" type="VARCHAR(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="key" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+
+  <changeSet id="44-add-seed-data" author="msucil">
+    <sql>
+      <![CDATA[
+        INSERT INTO [authorization] (name, value, [key]) VALUES
+          ('Create Questions', 'CREATE_QUESTION', 'eligibility-question'),
+          ('View Questions', 'VIEW_QUESTION', 'eligibility-question'),
+          ('Update Questions', 'UPDATE_QUESTION', 'eligibility-question'),
+          ('Delete Questions', 'DELETE', 'eligibility-question'),
+
+          ('Create Branch', 'CREATE_BRANCH', 'branch'),
+          ('View Branch', 'VIEW_BRANCH', 'branch'),
+          ('Update Branch', 'UPDATE_BRANCH', 'branch'),
+          ('Delete Branch', 'DELETE_BRANCH', 'branch')
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="63-rename-customer-document-Path-customer-loan" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="customer_document_Path_customer_loan"/>
+    </preConditions>
+    <renameTable oldTableName="customer_document_Path_customer_loan"
+      newTableName="customer_document_path_customer_loan"/>
+  </changeSet>
+
+  <changeSet id="63-rename-customer-document-Path-customer-loan-audit" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="customer_document_Path_customer_loan_audit"/>
+    </preConditions>
+    <renameTable oldTableName="customer_document_Path_customer_loan_audit"
+      newTableName="customer_document_path_customer_loan_audit"/>
+  </changeSet>
+
+  <changeSet id="63-offer-letter-Path-customer-loan" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="offer_letter_Path_customer_loan"/>
+    </preConditions>
+    <renameTable oldTableName="offer_letter_Path_customer_loan" newTableName="offer_letter_path_customer_loan"/>
+  </changeSet>
+
+  <changeSet id="64-alter-branch-add-column-location-preview" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="branch" columnName="location_preview"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="branch">
+      <column name="location_preview" type="VARCHAR(500)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="62-create-groups" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="groups"/>
+      </not>
+    </preConditions>
+    <createTable tableName="groups">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_group_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_group_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="112-alter-customer-loan-add-groups" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="group_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="group_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_groups_id"
+          referencedTableName="groups"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="rabin" id="60-base-interest">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="base_interest_rate"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="base_interest_rate">
+      <column name="id" autoIncrement="true" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="rate" type="FLOAT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="INT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="112-alter-customer-remove-account-no" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="customer" columnName="account_no"/>
+    </preConditions>
+    <dropColumn tableName="customer" columnName="account_no"/>
+  </changeSet>
+
+  <changeSet id="67-create-vehicle-security" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="vehicle_security"/>
+      </not>
+    </preConditions>
+    <createTable tableName="vehicle_security">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_vehicle_security_created_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_vehicle_security_modified_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="67-alter-customer-loan-add-vehicle-security" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="vehicle_security_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="vehicle_security_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_vehicle_security_id_vehicle_security_id"
+          referencedTableName="vehicle_security"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="65-add-table-share_security" author="bibas">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="share_security"/>
+      </not>
+    </preConditions>
+    <createTable tableName="share_security">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="data" type="LONGTEXT">
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_share_security_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_share_security_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="share-security-alter-66" author="bibash">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="share_security_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="share_security_id" type="BIGINT">
+        <constraints foreignKeyName="fk_customer_share_security_id"
+          referencedTableName="share_security"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="share-customer-data-table-71" author="bibash">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="customer_share_data"/>
+      </not>
+    </preConditions>
+    <createTable tableName="customer_share_data">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="company_name" type="Varchar(256)">
+      </column>
+      <column name="share_type" type="varchar(100)">
+      </column>
+      <column name="total_share_unit" type="INT">
+      </column>
+      <column name="share_rate" type="Double">
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_customer_share_data_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_customer_share_data_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="share-customer-data-third-table-72" author="bibash">
+    <preConditions>
+      <not>
+        <tableExists tableName="share_security_customer_share_data"/>
+      </not>
+    </preConditions>
+    <createTable tableName="share_security_customer_share_data">
+      <column name="share_security_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_loan_customer_share_security_id"
+          referencedTableName="share_security"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="customer_share_data_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_loan_customer_share_data_id"
+          referencedTableName="customer_share_data"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="75-create-vehicle-security-valuator" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="vehicle_security_valuator"/>
+      </not>
+    </preConditions>
+    <createTable tableName="vehicle_security_valuator">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_vehicle_security_valuator_created_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_vehicle_security_valuator_modified_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="valuator_id" type="BIGINT">
+        <constraints foreignKeyName="fk_vehicle_security_valuator_valuator_id_valuator_id"
+          referencedTableName="valuator" referencedColumnNames="id"/>
+      </column>
+      <column name="valuated_date" type="DATE"/>
+      <column name="valuator_representative_name" type="VARCHAR(255)"/>
+      <column name="staff_representative_name" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet id="75-create-vehicle-security-valuator-list" author="elvin">
+    <preConditions>
+      <not>
+        <tableExists tableName="vehicle_security_valuator_list"/>
+      </not>
+    </preConditions>
+    <createTable tableName="vehicle_security_valuator_list">
+      <column name="vehicle_security_id" type="BIGINT">
+        <constraints foreignKeyName="fk_vehicle_security_valuator_list_vehicle_security_id_vehicle_security_id"
+          referencedTableName="vehicle_security" referencedColumnNames="id"/>
+      </column>
+      <column name="valuator_list_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_vehicle_security_valuator_list_valuator_list_id_vehicle_security_valuator_id"
+          referencedTableName="vehicle_security_valuator" referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="75-alter-vehicle-security-valuator" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="vehicle_security_valuator" columnName="vehicle_name"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="model"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="manufacture_year"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="registration_number"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="valuation_amount"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="engine_number"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="chassis_number"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="registration_date"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="color"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="purpose"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="supplier"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="down_payment"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="loan_exposure"/>
+        <columnExists tableName="vehicle_security_valuator" columnName="showroom_commission"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="vehicle_security_valuator">
+      <column name="vehicle_name" type="VARCHAR(255)"/>
+      <column name="model" type="VARCHAR(255)"/>
+      <column name="manufacture_year" type="DATE"/>
+      <column name="registration_number" type="VARCHAR(255)"/>
+      <column name="valuation_amount" type="DOUBLE"/>
+      <column name="engine_number" type="VARCHAR(255)"/>
+      <column name="chassis_number" type="VARCHAR(255)"/>
+      <column name="registration_date" type="DATE"/>
+      <column name="color" type="VARCHAR(255)"/>
+      <column name="purpose" type="VARCHAR(255)"/>
+      <column name="supplier" type="VARCHAR(255)"/>
+      <column name="down_payment" type="DOUBLE"/>
+      <column name="loan_exposure" type="FLOAT"/>
+      <column name="showroom_commission" type="DOUBLE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="75-alter-vehicle-security-valuator-remove-data" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="vehicle_security" columnName="data"/>
+    </preConditions>
+    <dropColumn tableName="vehicle_security" columnName="data"/>
+  </changeSet>
+  <changeSet id="68-alter-guarantor-remove-column" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="guarantor" columnName="fatherName"/>
+      <columnExists tableName="guarantor" columnName="address"/>
+      <columnExists tableName="guarantor" columnName="citizenNumber"/>
+      <columnExists tableName="guarantor" columnName="grandFatherName"/>
+      <columnExists tableName="guarantor" columnName="contactNumber"/>
+      <columnExists tableName="guarantor" columnName="citizenIssuedYear"/>
+      <columnExists tableName="guarantor" columnName="citizenIssuedPlace"/>
+    </preConditions>
+    <dropColumn tableName="guarantor" columnName="citizenIssuedPlace"/>
+    <dropColumn tableName="guarantor" columnName="citizenIssuedYear"/>
+    <dropColumn tableName="guarantor" columnName="contactNumber"/>
+    <dropColumn tableName="guarantor" columnName="grandFatherName"/>
+    <dropColumn tableName="guarantor" columnName="citizenNumber"/>
+    <dropColumn tableName="guarantor" columnName="address"/>
+    <dropColumn tableName="guarantor" columnName="fatherName"/>
+  </changeSet>
+
+  <changeSet id="69-alter-guarantor-add-column" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="guarantor" columnName="municipalities_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="guarantor">
+      <column name="citizen_number" type="varchar(256)"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="issued_place" type="varchar(256)"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="issued_year" type="Date"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="father_name" type="varchar(256)"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="grand_father_name" type="varchar(256)"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="contact_number" type="varchar(256)"/>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="province_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_guarantor_province_id"
+          referencedTableName="province"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="district_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_guarantor_district_id"
+          referencedTableName="district"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+    <addColumn tableName="guarantor">
+      <column name="municipalities_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_guarantor_municipality_vdc_id"
+          referencedTableName="municipality_vdc"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+
+  <changeSet id="70-add-third-table-security-guarantor" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="security_guarantor"/>
+      </not>
+    </preConditions>
+    <createTable tableName="security_guarantor">
+      <column name="security_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="guarantor_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="security_id"
+      baseTableName="security_guarantor"
+      constraintName="fk_security_guarantor_security"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="security"/>
+    <addForeignKeyConstraint baseColumnNames="guarantor_id"
+      baseTableName="security_guarantor"
+      constraintName="fk_security_guarantor_guarantor"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="guarantor"/>
+  </changeSet>
+
+  <changeSet id="73-alter-security-add-valuator-id" author="buddha">
+    <preConditions>
+      <not>
+        <columnExists tableName="security" columnName="valuator_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="security">
+      <column name="valuator_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_security_valuator_id"
+          referencedTableName="valuator"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="81-create-groups-valuator" author="buddha">
+    <preConditions>
+      <not>
+        <tableExists tableName="groups_valuator"></tableExists>
+      </not>
+    </preConditions>
+    <createTable tableName="groups_valuator">
+      <column name="group_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="valuator_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="group_id"
+      baseTableName="groups_valuator"
+      constraintName="fk_groups_valuator_group_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="groups"/>
+    <addForeignKeyConstraint baseColumnNames="valuator_id"
+      baseTableName="groups_valuator"
+      constraintName="fk_groups_valuator_valuator_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="valuator"/>
+  </changeSet>
+
+  <changeSet id="82-create-nepali-template" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="nepali_template"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="nepali_template">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_nepali_template_created_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_nepali_template_modified_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="type" type="VARCHAR(256)"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="82-create-customer-loan-nepali-templates" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="customer_loan_nepali_templates"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="customer_loan_nepali_templates">
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints foreignKeyName="fk_customer_loan_nepali_templates_customer_loan_id_customer_loan_id"
+          referencedTableName="customer_loan"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="nepali_templates_id" type="BIGINT">
+        <constraints foreignKeyName="fk_customer_loan_nepali_templates_nepali_templates_id_nepali_template_id"
+          referencedTableName="nepali_template"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="82-alter-customer-add-nepali-detail" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer" columnName="nepali_detail"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="customer">
+      <column name="nepali_detail" type="LONGTEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="82-alter-customer-audit-add-nepali-detail" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_audit" columnName="nepali_detail"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="customer_audit">
+      <column name="nepali_detail" type="LONGTEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="82-drop-customer_loan_nepali_templates" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="customer_loan_nepali_templates"/>
+    </preConditions>
+
+    <dropTable tableName="customer_loan_nepali_templates"/>
+  </changeSet>
+
+  <changeSet id="82-alter-nepali_template" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="nepali_template" columnName="customer_loan_id"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="nepali_template">
+      <column name="customer_loan_id" type="BIGINT">
+        <constraints foreignKeyName="fk_nepali_template_customer_loan_id_customer_loan_id"
+          referencedTableName="customer_loan" referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="83-alter-customer_loan" author="sunil">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="limitExceed"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="customer_loan">
+      <column name="limit_exceed" type="SMALLINT" value="0">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="approval-role-hierarchy" author="msucil">
+    <createTable tableName="approval_role_hierarchy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_approval_role_hierarchy_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="role_order" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_approval_role_hierarchy_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_approval_role_hierarchy_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="approval_type" type="VARCHAR(50)" defaultValue="DEFAULT"/>
+      <column name="ref_id" type="BIGINT" defaultValue="0">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="84-create-maw-credit-risk-grading" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="maw_credit_risk_grading"/>
+      </not>
+    </preConditions>
+    <createTable tableName="maw_credit_risk_grading">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_maw_credit_risk_grading_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_maw_credit_risk_grading_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+      <column name="data" type="LONGTEXT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="84-alter-customer-loan-add-maw-credit-risk-grading" author="Amulya">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="maw_credit_risk_grading_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="maw_credit_risk_grading_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_maw_credit_risk_grading_id"
+          referencedTableName="maw_credit_risk_grading"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="85-create-dealer" author="sunil">
+    <createTable tableName="dealer">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+        <constraints nullable=" false"
+          unique="true"
+          uniqueConstraintName="udx_dealer_name"
+        />
+      </column>
+      <column name="dealer_code" type="VARCHAR(256)"/>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="province_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_dealer_province_id"
+          referencedTableName="province"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="district_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_dealer_district_id"
+          referencedTableName="district"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="municipality_vdc_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_dealer_municipality_vdc_id"
+          referencedTableName="municipality_vdc"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="street_name" type="VARCHAR(256)"/>
+      <column name="ward_number" type="VARCHAR(256)"/>
+      <column name="email" type="VARCHAR(256)"/>
+      <column name="landline_number" type="VARCHAR(256)"/>
+      <column name="location_preview" type="VARCHAR(500)"/>
+      <column name="branch_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_branch_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+
+    </createTable>
+  </changeSet>
+
+  <changeSet id="86-create-branch-dealers" author="sunil">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="branch_dealers"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="branch_dealers">
+      <column name="branch_id" type="BIGINT">
+        <constraints foreignKeyName="fk_branch_dealers_branch_id_branch_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="dealers_id" type="BIGINT">
+        <constraints foreignKeyName="fk_branch_dealers_dealer_id_dealer_id"
+          referencedTableName="dealer"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="87-alter-customer-loan-add-ref-no" author="sunil">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="ref_no"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="ref_no" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="88-alter-customer-loan-dealer-id" author="buddha">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="dealer_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="dealer_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_dealer_id"
+          referencedTableName="dealer"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="89-alter-customer-loan-add-remarks">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists columnName="loan_remarks" tableName="customer_loan"/>
+        <columnExists columnName="low_proposed_limit" tableName="customer_loan"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="loan_remarks" type="LONGTEXT"/>
+    </addColumn>
+
+    <addColumn tableName="customer_loan">
+      <column defaultValue="0" name="low_proposed_limit" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="89-alter-customer-loan-add-lowCreditScore">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists columnName="low_credit_score" tableName="customer_loan"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="low_credit_score" type="BIT" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="90-create-blacklist" author="Aashish">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="black_list"/>
+      </not>
+    </preConditions>
+    <createTable tableName="black_list">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(255)"/>
+      <column name="ref" type="VARCHAR(255)"/>
+      <column name="doc_type" type="CHAR(1)"/>
+      <column name="status" type="VARCHAR(10)"/>
+
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_black_list_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_black_list_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="91-remove-security-guarantor" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="security_guarantor"/>
+    </preConditions>
+
+    <dropTable tableName="security_guarantor"/>
+  </changeSet>
+
+  <changeSet id="92-remove-customer-customerId" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="customer" columnName="customer_id"/>
+    </preConditions>
+
+    <dropColumn tableName="customer" columnName="customer_id"/>
+  </changeSet>
+
+  <changeSet id="92-remove-customer-title" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="customer" columnName="title"/>
+    </preConditions>
+
+    <dropColumn tableName="customer" columnName="title"/>
+  </changeSet>
+
+  <changeSet id="93-create-guarantor-detail" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="guarantor_detail"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="guarantor_detail">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_guarantor_detail_created_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_guarantor_detail_modified_by_id_users_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="93-alter-customer-loan-add-guarantor-id" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="guarantor_id"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="customer_loan">
+      <column name="guarantor_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_guarantor_id_guarantor_detail_id"
+          referencedTableName="guarantor_detail"
+          referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="93-create-guarantor_detail_guarantor_list" author="elvin">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="guarantor_detail_guarantor_list"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="guarantor_detail_guarantor_list">
+      <column name="guarantor_detail_id" type="BIGINT">
+        <constraints foreignKeyName="fk_guarantor_detail_guarantor_list_guarantor_detail_id_guarantor_detail_id"
+          referencedTableName="guarantor_detail"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="guarantor_list_id" type="BIGINT">
+        <constraints foreignKeyName="fk_guarantor_detail_guarantor_list_guarantor_list_id_guarantor_id"
+          referencedTableName="guarantor"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <!-- Missing change set from release v2.0.0 -->
+  <changeSet id="update-change-set-filepath-v2.0.0-missing" author="elvin" runOnChange="true">
+    <sql>
+      <![CDATA[
+      UPDATE DATABASECHANGELOG
+      SET FILENAME = 'classpath:/db/changelog/release/v2.0.0-release.xml'
+      WHERE ID IN (
+      '79-create-table-nepse-master'
+      )
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="79-create-table-nepse-master" author="bibash">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="nepse_master"/>
+      </not>
+    </preConditions>
+    <createTable tableName="nepse_master">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_nepse_master_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints foreignKeyName="fk_nepse_master_modified_by_id"
+          nullable="true"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="true"/>
+      </column>
+      <column name="promoter" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ordinary" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>

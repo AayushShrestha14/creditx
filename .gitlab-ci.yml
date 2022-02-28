@@ -1,0 +1,11 @@
+image: java:8
+
+stages:
+  - build
+
+build:
+  stage: build
+  script: ./mvnw clean package
+  only:
+    - master
+    - merge_requests

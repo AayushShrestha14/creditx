@@ -1,0 +1,121 @@
+server:
+  port: 8086
+  compression:
+    enabled: true
+spring:
+  application:
+    name: las
+  jmx:
+    default-domain: las
+  profiles:
+    active: century
+  thymeleaf:
+    enabled: true
+    check-template-location: true
+    prefix: classpath:/webapp/
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+      org:
+        hibernate:
+          envers:
+            audit_table_suffix: _audit
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  root:
+    level: debug
+  org:
+    hibernate:
+      SQL: error
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    refresh:
+      enabled: true
+    restart:
+      enabled: true
+
+file:
+  upload-directory: C:/
+
+bank:
+  affiliateId: mega
+  name: Century Commercial Bank Ltd.
+  website: http://www.centurybank.com.np/
+  frontaddress: "http://localhost:4200/"
+
+mailproperty:
+  additionalHeaders:
+    mail:
+      transport:
+        protocol: smtp
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        socketFactory:
+          class: javax.net.ssl.SSLSocketFactory
+      debug: true
+
+product:
+  las: true
+  offerletter: true
+  memo: false
+  account: true
+  eligibility: true
+  dms: false
+  nepTemplate: true
+  cadLiteVersion: false
+  loanApprovalHierarchyLevel: LOAN #DEAFULT = Disable Approval Hierarchy, LOAN_TYPE = Enable Approval Hierarchy for loan type, LOAN = Enable Role Hierarchy for loan
+  fullCad: true #only fullCad should not be enable. you should enable offerLetter also
+  cbsEnable: false
+  checklistLiteVersion: true
+  microLoan: true
+  customerBaseLoan : true
+  configureLegalDocument: true #set true if check if checklistLiteVersion is true and config in cad dashboard by cad
+
+#this feature is enabled if cbsEnable is set true
+#url : remote server url
+app:
+  datasource:
+    cbs:
+      url: jdbc:sqlserver://150.107.205.62:1433;database=cbs
+      username: sa
+      password: sbdb@141
+      driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    tableName: cbs_group
+    uniqueKey: obligor
+
+apims:
+  api: http://202.79.47.32:2403/api/v1/connect
+  username: SB
+  password: Sb@123
+  cert-file-path: /home/src/main/resources/cert/apims/privatekey.pks
+
+jwt:
+  secret: collectX
+  expirationDateInMs: 3000000
+  refreshExpirationDateInMs: 9000000

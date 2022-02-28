@@ -1,0 +1,15 @@
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet id="1-insert_permission" author="rujan">
+    <sql>
+      INSERT INTO permission (id, permission_name, fa_icon, front_url, orders, status) VALUES (65,
+      'Loan', 'fa fa-user', '', 100, 1);
+      INSERT INTO url_api (id,api_url,type) values (50,'/v1/makerApproval','Maker');
+      INSERT INTO url_api (id,api_url,type) values (51,'/v1/makerApproval','Approval');
+      INSERT INTO permission_api_list(permission_id, api_list_id) values (65,50);
+      INSERT INTO permission_api_list(permission_id, api_list_id) values (65,51);
+    </sql>
+  </changeSet>
+</databaseChangeLog>

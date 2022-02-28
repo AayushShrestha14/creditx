@@ -1,0 +1,1941 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="update-changeset-filepath-v0.1.0" author="msucil" runOnChange="true">
+    <sql>
+      <![CDATA[
+        UPDATE DATABASECHANGELOG
+        SET FILENAME = 'classpath:/db/changelog/release/v0.1.0-release.xml'
+        WHERE ID IN ('1-create-question',
+          '1-create-answer',
+          '1-create-applicant',
+          '1-create-applicant-answer',
+          '1-create-submission-document',
+          '1-create-applicant-document',
+          '1-create-role-hierarchy',
+          '6-create-loan-stage-table',
+          '6-create-dms-loan-file-table',
+          '6-create-loan-document-table',
+          '6-create-dms-loan-file-documents-table',
+          '5-create-customer-loan',
+          '5-create-loan-config-eligibility-documents',
+          '1-create-eligibility-criteria',
+          '1-create-eligibility-question',
+          '1-create-eligibility-answer',
+          '6-create-account-purpose',
+          '6-create-account-type',
+          '5-create-account-type-account-purpose',
+          '13-create-opening_form',
+          '12-create-user-branch',
+          '18-offer-letter',
+          '18-loan-config-offer-letters',
+          '20-reset-password',
+          '20-email-config',
+          'modifyDataType',
+          '19-create-proposal',
+          '19-alter-customer-loan-proposal-add-proposal',
+          'management_team',
+          '21-product_mode',
+          '26-create-loan-config-closure',
+          '30-alter-dms',
+          '27-create-customer-otp',
+          '31-alter-loan_config',
+          '1-remove-eligibility-criteria-threshold_amount',
+          '31-alter-customer-loan-add-loan-category',
+          '31-alter-dms-loan-file',
+          '28-create-message',
+          '31-alter-customer-loan',
+          '31_alter_customer',
+          '31_alter_dms',
+          '31_alter_entity_info',
+          '31dms-loan-file-securities',
+          '30-alter-loan_config',
+          '29_add_dms_additional_fields',
+          '31_add_applicant_email',
+          '33_add_document_display_name',
+          '19-create-financial',
+          '19-alter-customer-loan-proposal',
+          'dropUniqueConstraint',
+          '23-create-site-visit',
+          '23-alter-customer-loan',
+          'modify_ApprovalLimit_DmsLoanFile',
+          'modify_proposed_limit',
+          'modify_dms_limit',
+          '34-alter-customer-loan',
+          '35-change-entity-date-type',
+          '78_default_committee',
+          '23-alter-customer-loan-file',
+          '36-change-entity-info-to-company-info',
+          '37-change-dms-entity',
+          '38-change-customer',
+          '41-alter-financial-changeset',
+          '41-alter-financial-dropColumn-changeset',
+          '39-create-security',
+          '45-alter-customer-loan-security',
+          '43-alter-security-changeset',
+          '43-alter-security-dropColumn-changeset',
+          '23-alter-site-visit-drop-foreign-constraint',
+          '23-alter-site-visit-drop-column',
+          '23-alter-site-visit-add-column',
+          '23-alter-site-visit-add-foreign-constraint',
+          '42-json-alter-site-visit',
+          '42-add-column-data-site-visit',
+          '40-create-proposal',
+          '40-drop-proposal-to-json',
+          '40-add-proposal-to-json',
+          '40-add-proposal-proposal_limit',
+          '46-alter-legal-status',
+          '46-alter-legal-status-pan-number',
+          '46-alter-legal-status-registration')
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="1-create-question" author="rawseek">
+    <createTable tableName="question">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="description" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="maximum_points" type="BIGINT"/>
+      <column name="appearance_order" type="BIGINT"/>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="loan_config_id" type="BIGINT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="question"
+      constraintName="fk_question_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+  </changeSet>
+
+  <changeSet id="1-create-answer" author="rawseek">
+    <createTable tableName="answer">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="description" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="points" type="BIGINT"/>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="question_id" type="BIGINT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="question_id"
+      baseTableName="answer"
+      constraintName="fk_answer_question_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="question"/>
+  </changeSet>
+
+  <changeSet id="1-create-applicant" author="rawseek">
+    <createTable tableName="applicant">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="full_name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="age" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="phone_number" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="request_amount" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="obtained_marks" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="eligible_amount" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="eligibility_status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="remarks" type="VARCHAR(2000)"/>
+      <column name="loan_config_id" type="BIGINT"/>
+      <column name="branch_id" type="BIGINT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="branch_id"
+      baseTableName="applicant"
+      constraintName="fk_applicant_branch_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="branch"/>
+  </changeSet>
+
+  <changeSet id="1-create-applicant-answer" author="rawseek">
+    <createTable tableName="applicant_answer">
+      <column name="applicant_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="answer_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="applicant_id"
+      baseTableName="applicant_answer"
+      constraintName="fk_applicant_answer_applicant_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="applicant"/>
+    <addForeignKeyConstraint baseColumnNames="answer_id"
+      baseTableName="applicant_answer"
+      constraintName="fk_applicant_answer_answer_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="answer"/>
+  </changeSet>
+
+  <changeSet id="1-create-submission-document" author="rawseek">
+    <createTable tableName="submission_document">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="url" type="VARCHAR(1000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1-create-applicant-document" author="rawseek">
+    <createTable tableName="applicant_document">
+      <column name="applicant_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="submission_document_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="applicant_id"
+      baseTableName="applicant_document"
+      constraintName="fk_applicant_document_applicant_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="applicant"/>
+    <addForeignKeyConstraint baseColumnNames="submission_document_id"
+      baseTableName="applicant_document"
+      constraintName="fk_applicant_document_submission_document_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="submission_document"/>
+  </changeSet>
+
+  <changeSet id="1-create-role-hierarchy" author="rujan">
+    <createTable tableName="role_hierarchy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_role_hierarchy_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="role_order" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_role_hierarchy_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_role_hierarchy_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6-create-loan-stage-table" author="rujan">
+    <createTable tableName="loan_stage">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="from_user_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_from_user_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="to_user_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_to_user_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+
+      <column name="from_role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_from_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="to_role_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_stage_to_role_id"
+          referencedTableName="role"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="doc_action" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6-create-dms-loan-file-table" author="anil">
+    <createTable tableName="dms_loan_file">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="customer_name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="citizenship_number" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="contact_number" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="interest_rate" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="proposed_amount" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="security" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="service_charge_type" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="service_charge_amount" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="document_path" type="VARCHAR(256)"/>
+      <column name="priority" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_conclusion" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenure" type="DATE"/>
+      <column name="tenure_duration" type="INT"/>
+      <column name="waiver" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_dms_loan_file_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_dms_loan_file_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="current_stage_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6-create-loan-document-table" author="anil">
+    <createTable tableName="loan_document">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_document_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_loan_document_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6-create-dms-loan-file-documents-table" author="anil">
+    <createTable tableName="dms_loan_file_documents">
+      <column name="dms_loan_file_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="documents_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="dms_loan_file_documents"
+      baseColumnNames="dms_loan_file_id"
+      constraintName="fk_dms_loan_file_documents_dms_loan_file_id"
+      referencedTableName="dms_loan_file"
+      referencedColumnNames="id"/>
+    <addForeignKeyConstraint baseTableName="dms_loan_file_documents"
+      baseColumnNames="documents_id"
+      constraintName="fk_dms_loan_file_documents_documents_id"
+      referencedTableName="loan_document"
+      referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="5-create-customer-loan" author="rujan">
+    <createTable tableName="customer_loan">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="customer_info_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_customer_info_id"
+          referencedTableName="customer"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="loan_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_loan_id"
+          referencedTableName="loan_config"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="entity_info_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_entity_customer_info_id"
+          referencedTableName="entity_info"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="loan_type" type="INT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="is_validated" type="INT">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="document_status" type="INT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="dms_loan_file_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_dms_loan_file_id"
+          referencedTableName="dms_loan_file"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="current_stage_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_current_stage_id"
+          referencedTableName="loan_stage"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="previous_stage_list" type="LONGTEXT"/>
+      <column name="priority" type="INT">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="branch_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_branch_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"/>
+      </column>
+
+      <column name="offer_letter_url" type="VARCHAR(100)">
+      </column>
+
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_customer_loan_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="5-create-loan-config-eligibility-documents" author="rawseek">
+    <createTable tableName="loan_config_eligibility_documents">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="eligibility_documents_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_eligibility_documents"
+      constraintName="fk_loan_config_eligibility_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+    <addForeignKeyConstraint baseColumnNames="eligibility_documents_id"
+      baseTableName="loan_config_eligibility_documents"
+      constraintName="fk_loan_config_eligibility_eligibility_documents_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="document"/>
+  </changeSet>
+
+  <changeSet id="1-create-eligibility-criteria" author="rawseek">
+    <createTable tableName="eligibility_criteria">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="percentage_of_amount" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="threshold_amount" type="DOUBLE"/>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="formula" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1-create-eligibility-question" author="rawseek">
+    <createTable tableName="eligibility_question">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="description" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="operand_character" type="VARCHAR(20)"/>
+      <column name="appearance_order" type="BIGINT"/>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="eligibility_criteria_id" type="BIGINT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="eligibility_criteria_id"
+      baseTableName="eligibility_question"
+      constraintName="fk_eligibility_question_eligibility_criteria_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="eligibility_criteria"/>
+  </changeSet>
+
+  <changeSet id="1-create-eligibility-answer" author="rawseek">
+    <createTable tableName="eligibility_answer">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="value" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="eligibility_question_id" type="BIGINT"/>
+      <column name="applicant_id" type="BIGINT"/>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="eligibility_question_id"
+      baseTableName="eligibility_answer"
+      constraintName="fk_eligibility_answer_eligibility_question_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="eligibility_question"/>
+    <addForeignKeyConstraint baseColumnNames="applicant_id"
+      baseTableName="eligibility_answer"
+      constraintName="fk_eligibility_answer_applicant_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="applicant"/>
+  </changeSet>
+
+  <changeSet id="6-create-account-purpose" author="david">
+    <createTable tableName="account_purpose">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6-create-account-type" author="david">
+    <createTable tableName="account_type">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="5-create-account-type-account-purpose" author="david">
+    <createTable tableName="account_type_account_purpose">
+      <column name="account_type_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="account_purpose_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="account_type_id"
+      baseTableName="account_type_account_purpose"
+      constraintName="fk_account_type_account_purpose_account_type"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="account_type"/>
+    <addForeignKeyConstraint baseColumnNames="account_purpose_id"
+      baseTableName="account_type_account_purpose"
+      constraintName="fk_account_type_account_purpose_account_purpose"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="account_purpose"/>
+  </changeSet>
+
+  <changeSet id="13-create-opening_form" author="david">
+    <createTable tableName="opening_form">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="branch_id" type="BIGINT">
+        <constraints nullable="false"
+          foreignKeyName="fk_opening_form_branch_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="status" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="full_name" type="VARCHAR(256)"/>
+      <column name="account_type_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_opening_form_account_type_id"
+          referencedTableName="account_type"
+          referencedColumnNames="id"/>
+
+      </column>
+      <column name="requested_date" type="DATE"/>
+      <column name="customer_details_json" type="TEXT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="12-create-user-branch" author="rujan">
+    <createTable tableName="users_branch">
+      <column name="user_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_user_user_id"
+          referencedTableName="users"
+          referencedColumnNames="id"
+        />
+      </column>
+      <column name="branch_id" type="BIGINT">
+        <constraints
+          foreignKeyName="fk_branch_branch_id"
+          referencedTableName="branch"
+          referencedColumnNames="id"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="18-offer-letter" author="david">
+    <createTable tableName="offer_letter">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="template_url" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="18-loan-config-offer-letters" author="david">
+    <createTable tableName="loan_config_offer_letters">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="offer_letters_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_offer_letters"
+      constraintName="fk_loan_config_offer_letters_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+    <addForeignKeyConstraint baseColumnNames="offer_letters_id"
+      baseTableName="loan_config_offer_letters"
+      constraintName="fk_loan_config_offer_letters_offer_letters_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="offer_letter"/>
+  </changeSet>
+
+  <changeSet id="20-reset-password" author="elvin">
+    <addColumn tableName="users">
+      <column name="reset_password_token" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+    <addColumn tableName="users">
+      <column name="reset_password_token_expiry" type="DATETIME">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20-email-config" author="rujan">
+    <createTable tableName="email_config">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="username" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="domain" type="VARCHAR(256)">
+      </column>
+      <column name="host" type="VARCHAR(256)">
+      </column>
+      <column name="port" type="VARCHAR(256)">
+      </column>
+      <column name="email_type" type="VARCHAR(256)">
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_email_config_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_email_config_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="rujan" id="modifyDataType">
+    <modifyDataType
+      columnName="document_path"
+      newDataType="LONGTEXT"
+      tableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet id="19-create-proposal" author="dipu">
+    <createTable tableName="proposal">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="base_rate" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="cib_charge" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="proposed_limit" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="interest_rate" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="premium_rate_on_base_rate" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="service_charge" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="service_charge_method" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="repayment_mode" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenure_duration_in_months" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="purpose_of_submission" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="disbursement_criteria" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="credit_information_report_status" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="income_from_the_account" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="borrower_information" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_proposal_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_proposal_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="19-alter-customer-loan-proposal-add-proposal" author="dipu">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="proposal_id"/>
+      </not>
+    </preConditions>
+    <addColumn
+      tableName="customer_loan">
+      <column name="proposal_id" type="BIGINT"/>
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="proposal_id"
+      baseTableName="customer_loan"
+      constraintName="fk_customer_loan_proposal_id"
+      referencedColumnNames="id"
+      referencedTableName="proposal"/>
+  </changeSet>
+
+  <changeSet id="management_team" author="david">
+    <dropNotNullConstraint
+      columnDataType="LONGTEXT"
+      columnName="description"
+      tableName="management_team"/>
+  </changeSet>
+
+  <changeSet id="21-product_mode" author="rujan">
+    <createTable tableName="product_mode">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="product" type="INT(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="INT(10)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(256)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="26-create-loan-config-closure" author="elvin">
+    <createTable tableName="loan_config_closure">
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="closure_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="loan_config_id"
+      baseTableName="loan_config_closure"
+      constraintName="fk_loan_config_closure_loan_config_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="loan_config"/>
+    <addForeignKeyConstraint baseColumnNames="closure_id"
+      baseTableName="loan_config_closure"
+      constraintName="fk_loan_config_closure_closure_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="document"/>
+  </changeSet>
+
+  <changeSet id="30-alter-dms" author="rujan">
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="fmv_total" type="DOUBLE"/>
+    </addColumn>
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="total_loan_limit" type="DOUBLE"/>
+    </addColumn>
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="group_expo" type="VARCHAR(100)"/>
+    </addColumn>
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="fmv_funding_percent" type="DOUBLE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="27-create-customer-otp" author="elvin">
+    <createTable tableName="customer_otp">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="first_name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="middle_name" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="last_name" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="mobile" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="otp" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="expiry" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+      columnNames="email"
+      constraintName="customer_otp_unique_email"
+      tableName="customer_otp"/>
+    <addUniqueConstraint
+      columnNames="mobile"
+      constraintName="customer_otp_unique_mobile"
+      tableName="customer_otp"/>
+  </changeSet>
+
+  <changeSet id="31-alter-loan_config" author="dipu">
+    <addColumn
+      tableName="loan_config">
+      <column name="minimum_proposed_amount" type="DOUBLE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="1-remove-eligibility-criteria-threshold_amount" author="elvin">
+    <dropColumn tableName="eligibility_criteria" columnName="threshold_amount"/>
+  </changeSet>
+
+  <changeSet id="31-alter-customer-loan-add-loan-category" author="rujan">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="loan_category"/>
+      </not>
+    </preConditions>
+    <addColumn
+      tableName="customer_loan">
+      <column name="loan_category" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="31-alter-dms-loan-file" author="rujan">
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="company_name" type="VARCHAR(256)"/>
+    </addColumn>
+    <addColumn
+      tableName="dms_loan_file">
+      <column name="registration_number" type="VARCHAR(256)"/>
+    </addColumn>
+    <dropNotNullConstraint
+      columnDataType="VARCHAR(256)"
+      columnName="citizenship_number"
+      tableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet id="28-create-message" author="yunish">
+    <createTable tableName="message">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="from_role" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="to_role" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="to_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="from_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="customer_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="loan_config_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="message" type="VARCHAR(500)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="31-alter-customer-loan" author="rujan">
+    <addColumn
+      tableName="customer_loan">
+      <column name="parent_id" type="BIGINT"/>
+    </addColumn>
+    <addColumn
+      tableName="customer_loan">
+      <column name="child_id" type="BIGINT"/>
+    </addColumn>
+    <addColumn
+      tableName="customer_loan">
+      <column name="is_close_renew" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="dipu" id="31_alter_customer">
+    <dropColumn
+      columnName="telephone"
+      tableName="customer"/>
+    <dropColumn
+      columnName="mobile"
+      tableName="customer"/>
+    <addColumn
+      tableName="customer">
+      <column name="contact_number" type="VARCHAR(256)"/>
+    </addColumn>
+    <addColumn
+      tableName="customer">
+      <column name="occupation" type="INT"/>
+    </addColumn>
+    <addColumn
+      tableName="customer">
+      <column name="income_source" type="INT"/>
+    </addColumn>
+    <addColumn
+      tableName="customer">
+      <column name="dob" type="DATE"/>
+    </addColumn>
+    <addUniqueConstraint
+      columnNames="citizenship_number"
+      constraintName="customer_unique_citizenship_number"
+      tableName="customer"/>
+  </changeSet>
+
+  <changeSet author="dipu" id="31_alter_dms">
+    <dropColumn
+      columnName="customer_name"
+      tableName="dms_loan_file"/>
+    <dropColumn
+      columnName="citizenship_number"
+      tableName="dms_loan_file"/>
+    <dropColumn
+      columnName="contact_number"
+      tableName="dms_loan_file"/>
+    <dropColumn
+      columnName="company_name"
+      tableName="dms_loan_file"/>
+    <dropColumn
+      columnName="registration_number"
+      tableName="dms_loan_file"/>
+    <dropColumn
+      columnName="security"
+      tableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet author="dipu" id="31_alter_entity_info">
+    <addColumn
+      tableName="entity_info">
+      <column name="company_name" type="varchar(256)"/>
+    </addColumn>
+    <addColumn
+      tableName="entity_info">
+      <column name="registration_number" type="varchar(256)"/>
+    </addColumn>
+    <dropNotNullConstraint columnDataType="BIGINT"
+      columnName="capital_id"
+      tableName="entity_info"/>
+    <dropNotNullConstraint columnDataType="BIGINT"
+      columnName="legal_status_id"
+      tableName="entity_info"/>
+    <dropNotNullConstraint columnDataType="BIGINT"
+      columnName="swot_id"
+      tableName="entity_info"/>
+    <addUniqueConstraint
+      columnNames="registration_number"
+      constraintName="entity_info_unique_registration_number"
+      tableName="entity_info"/>
+  </changeSet>
+
+  <changeSet id="31dms-loan-file-securities" author="dipu">
+    <createTable tableName="dms_loan_file_securities">
+      <column name="dms_loan_file_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="securities" type="varchar(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="dms_loan_file_id"
+      baseTableName="dms_loan_file_securities"
+      constraintName="fk_dms_loan_file_securities_dms_loan_file_id"
+      referencedColumnNames="id"
+      referencedTableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet id="30-alter-loan_config" author="yunish">
+    <addColumn
+      tableName="loan_config">
+      <column name="interest_rate" type="DOUBLE" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="29_add_dms_additional_fields">
+    <addColumn tableName="entity_info">
+      <column name="establishment_date" type="DATE"/>
+    </addColumn>
+    <addColumn tableName="entity_info">
+      <column name="business_type" type="INT"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="distress_value" type="DOUBLE"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="individual_exposure" type="VARCHAR(256)"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="institution_exposure" type="VARCHAR(256)"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="income_coverage_ratio" type="DOUBLE"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="debt_service_coverage_ratio" type="DOUBLE"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="key_person_name" type="VARCHAR(256)"/>
+    </addColumn>
+    <addColumn tableName="dms_loan_file">
+      <column name="dealing_product_name" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="31_add_applicant_email">
+    <addColumn tableName="applicant">
+      <column name="email" type="VARCHAR(256)" defaultValue="">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="33_add_document_display_name">
+    <addColumn tableName="document">
+      <column name="display_name" type="VARCHAR(256)" defaultValue="">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="19-create-financial" author="dipu">
+    <createTable tableName="financial">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="path" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_financial_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_financial_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="19-alter-customer-loan-proposal" author="dipu">
+    <addColumn
+      tableName="customer_loan">
+      <column name="financial_id" type="BIGINT"/>
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="financial_id"
+      baseTableName="customer_loan"
+      constraintName="fk_customer_loan_financial_id"
+      referencedColumnNames="id"
+      referencedTableName="financial"/>
+  </changeSet>
+
+  <changeSet author="rujan" id="dropUniqueConstraint">
+    <dropUniqueConstraint
+      constraintName="udx_user_email"
+      tableName="users"
+      uniqueColumns="email"/>
+  </changeSet>
+
+  <changeSet id="23-create-site-visit" author="yunish">
+    <createTable tableName="site_visit">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="path" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_site_visit_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_site_visit_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="23-alter-customer-loan" author="yunish">
+    <addColumn
+      tableName="customer_loan">
+      <column name="site_visit_id" type="BIGINT"/>
+
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="site_visit_id"
+      baseTableName="customer_loan"
+      constraintName="fk_customer_loan_site_visit_id"
+      referencedColumnNames="id"
+      referencedTableName="site_visit"/>
+  </changeSet>
+
+  <changeSet author="sunil" id="modify_ApprovalLimit_DmsLoanFile">
+    <modifyDataType
+      columnName="amount"
+      newDataType="decimal"
+      tableName="approval_limit"/>
+
+    <modifyDataType
+      columnName="proposed_amount"
+      newDataType="decimal"
+      tableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet author="sunil" id="modify_proposed_limit">
+    <modifyDataType
+      columnName="proposed_limit"
+      newDataType="decimal"
+      tableName="proposal"/>
+  </changeSet>
+
+  <changeSet author="sunil" id="modify_dms_limit">
+    <modifyDataType
+      columnName="service_charge_amount"
+      newDataType="float"
+      tableName="dms_loan_file"/>
+  </changeSet>
+
+  <changeSet id="34-alter-customer-loan" author="elvin">
+    <addColumn
+      tableName="customer_loan">
+      <column name="notify" type="BOOLEAN" defaultValue="false"/>
+    </addColumn>
+    <addColumn
+      tableName="customer_loan">
+      <column name="noted_by" type="BIGINT" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="35-change-entity-date-type" author="elvin">
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="answer"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="answer"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="applicant"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="applicant"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="approval_limit"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="approval_limit"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="branch"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="branch"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="capital"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="capital"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="company"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="company"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="customer"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="customer"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="customer_loan"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="customer_loan"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="customer_relative"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="customer_relative"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="dms_loan_file"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="dms_loan_file"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="document"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="document"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="eligibility_answer"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="eligibility_answer"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME"
+      tableName="eligibility_criteria"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="eligibility_criteria"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME"
+      tableName="eligibility_question"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="eligibility_question"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="entity_info"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="entity_info"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="guarantor"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="guarantor"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="legal_status"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="legal_status"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="loan_config"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="loan_config"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="loan_cycle"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="loan_cycle"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="loan_document"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="loan_document"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="loan_template"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="loan_template"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="management_team"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="management_team"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="memo"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="memo"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="memo_stage"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="memo_stage"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="memo_type"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="memo_type"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="nepse_company"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="nepse_company"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="proposal"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="proposal"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="proprietor"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="proprietor"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="question"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="question"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="role"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="role"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="role_hierarchy"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="role_hierarchy"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME"
+      tableName="role_permission_rights"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="role_permission_rights"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="sector"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="sector"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="segment"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="segment"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="sub_sector"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="sub_sector"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="sub_segment"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="sub_segment"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="submission_document"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME"
+      tableName="submission_document"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="swot"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="swot"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="users"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="users"/>
+
+    <modifyDataType columnName="created_at" newDataType="DATETIME" tableName="valuator"/>
+    <modifyDataType columnName="last_modified_at" newDataType="DATETIME" tableName="valuator"/>
+  </changeSet>
+
+  <changeSet id="78_default_committee" author="rujan">
+    <addColumn
+      tableName="users">
+      <column name="is_default_committee" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="23-alter-customer-loan-file" author="yunish">
+
+    <dropForeignKeyConstraint baseTableName="customer_loan"
+      constraintName="fk_customer_loan_site_visit_id"/>
+
+    <dropColumn tableName="customer_loan" columnName="site_visit_id"/>
+
+    <addColumn tableName="site_visit">
+      <column name="customer_loan_id" type="BIGINT"/>
+    </addColumn>
+
+    <addForeignKeyConstraint baseTableName="site_visit" baseColumnNames="customer_loan_id"
+      constraintName="fk_site_visit_customer_loan_id"
+      referencedTableName="customer_loan" referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet author="elvin" id="36-change-entity-info-to-company-info">
+    <renameTable oldTableName="entity_info" newTableName="company_info"/>
+    <renameTable oldTableName="entity_info_management_team_list"
+      newTableName="company_info_management_team_list"/>
+    <renameTable oldTableName="entity_info_proprietors_list"
+      newTableName="company_info_proprietors_list"/>
+
+    <renameColumn tableName="customer_loan" oldColumnName="entity_info_id"
+      newColumnName="company_info_id"/>
+    <renameColumn tableName="company_info_management_team_list" oldColumnName="entity_info_id"
+      newColumnName="company_info_id"/>
+    <renameColumn tableName="company_info_proprietors_list" oldColumnName="entity_info_id"
+      newColumnName="company_info_id"/>
+
+    <dropForeignKeyConstraint baseTableName="customer_loan"
+      constraintName="fk_customer_entity_customer_info_id"/>
+    <addForeignKeyConstraint baseTableName="customer_loan" baseColumnNames="company_info_id"
+      constraintName="fk_customer_company_customer_info_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedTableName="company_info"
+      referencedColumnNames="id"/>
+
+    <dropForeignKeyConstraint baseTableName="company_info_management_team_list"
+      constraintName="fk_entity_info_management_team_list_entity_info_id"/>
+    <addForeignKeyConstraint baseColumnNames="company_info_id"
+      baseTableName="company_info_management_team_list"
+      constraintName="fk_company_info_management_team_list_company_info_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="company_info"/>
+
+    <dropForeignKeyConstraint baseTableName="company_info_management_team_list"
+      constraintName="fk_entity_info_management_team_list_management_team_list_id"/>
+    <addForeignKeyConstraint baseColumnNames="management_team_list_id"
+      baseTableName="company_info_management_team_list"
+      constraintName="fk_company_info_management_team_list_management_team_list_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="management_team"/>
+
+    <dropForeignKeyConstraint baseTableName="company_info_proprietors_list"
+      constraintName="fk_entity_info_proprietors_list_entity_info_id"/>
+    <addForeignKeyConstraint baseColumnNames="company_info_id"
+      baseTableName="company_info_proprietors_list"
+      constraintName="fk_company_info_proprietors_list_company_info_id"
+      onDelete="CASCADE"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="company_info"/>
+
+    <dropForeignKeyConstraint baseTableName="company_info_proprietors_list"
+      constraintName="fk_entity_info_proprietors_list_proprietors_list_id"/>
+    <addForeignKeyConstraint baseColumnNames="proprietors_list_id"
+      baseTableName="company_info_proprietors_list"
+      constraintName="fk_company_info_proprietors_list_proprietors_list_id"
+      onDelete="RESTRICT"
+      onUpdate="CASCADE"
+      referencedColumnNames="id"
+      referencedTableName="proprietor"/>
+
+  </changeSet>
+
+  <changeSet author="elvin" id="37-change-dms-entity">
+    <modifyDataType tableName="dms_loan_file" columnName="individual_exposure"
+      newDataType="DOUBLE"/>
+    <modifyDataType tableName="dms_loan_file" columnName="institution_exposure"
+      newDataType="DOUBLE"/>
+    <modifyDataType tableName="dms_loan_file" columnName="group_expo" newDataType="DOUBLE"/>
+
+    <addColumn tableName="company_info">
+      <column name="pan_number" type="VARCHAR(256)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="elvin" id="38-change-customer">
+    <modifyDataType tableName="customer" columnName="occupation" newDataType="VARCHAR(256)"/>
+    <modifyDataType tableName="customer" columnName="income_source" newDataType="VARCHAR(256)"/>
+  </changeSet>
+
+  <changeSet id="41-alter-financial-changeset" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="financial" columnName="data"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="financial">
+      <column name="data" type="LONGTEXT"/>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="41-alter-financial-dropColumn-changeset" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="financial" columnName="path"/>
+    </preConditions>
+    <dropColumn tableName="financial" columnName="path"/>
+  </changeSet>
+
+  <changeSet id="39-create-security" author="safi">
+    <createTable tableName="security">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="path" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_security_created_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="modified_by_id" type="BIGINT">
+        <constraints nullable="true"
+          foreignKeyName="fk_security_modified_by_id"
+          referencedTableName="users"
+          referencedColumnNames="id"/>
+      </column>
+      <column name="created_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_at" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="INT" defaultValueNumeric="0"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="45-alter-customer-loan-security" author="safi">
+    <addColumn
+      tableName="customer_loan">
+      <column name="security_id" type="BIGINT"/>
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="security_id"
+      baseTableName="customer_loan"
+      constraintName="fk_customer_loan_security_id"
+      referencedColumnNames="id"
+      referencedTableName="security"/>
+  </changeSet>
+
+  <changeSet id="43-alter-security-changeset" author="safi">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="security" columnName="data"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="security">
+      <column name="data" type="LONGTEXT"/>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="43-alter-security-dropColumn-changeset" author="safi">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="security" columnName="path"/>
+    </preConditions>
+    <dropColumn tableName="security" columnName="path"/>
+  </changeSet>
+
+  <changeSet id="23-alter-site-visit-drop-foreign-constraint" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="fk_site_visit_customer_loan_id"
+        foreignKeyTableName="site_visit"/>
+    </preConditions>
+    <dropForeignKeyConstraint baseTableName="site_visit"
+      constraintName="fk_site_visit_customer_loan_id"/>
+  </changeSet>
+
+  <changeSet id="23-alter-site-visit-drop-column" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="site_visit" columnName="customer_loan_id"/>
+    </preConditions>
+    <dropColumn tableName="site_visit" columnName="customer_loan_id"/>
+  </changeSet>
+
+  <changeSet id="23-alter-site-visit-add-column" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="customer_loan" columnName="site_visit_id"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="customer_loan">
+      <column name="site_visit_id" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="23-alter-site-visit-add-foreign-constraint" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <foreignKeyConstraintExists foreignKeyTableName="customer_loan"
+          foreignKeyName="fk_customer_loan_site_visit_id"/>
+      </not>
+    </preConditions>
+    <addForeignKeyConstraint baseTableName="customer_loan" baseColumnNames="site_visit_id"
+      constraintName="fk_customer_loan_site_visit_id"
+      referencedTableName="site_visit" referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="42-json-alter-site-visit" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="site_visit" columnName="path"/>
+    </preConditions>
+    <dropColumn tableName="site_visit" columnName="path"/>
+  </changeSet>
+
+  <changeSet id="42-add-column-data-site-visit" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="site_visit" columnName="data"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="site_visit">
+      <column name="data" type="LONGTEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="40-create-proposal" author="aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="proposal" columnName="base_rate"/>
+      <columnExists tableName="proposal" columnName="cib_charge"/>
+      <columnExists tableName="proposal" columnName="proposed_limit"/>
+      <columnExists tableName="proposal" columnName="interest_rate"/>
+      <columnExists tableName="proposal" columnName="premium_rate_on_base_rate"/>
+      <columnExists tableName="proposal" columnName="service_charge"/>
+      <columnExists tableName="proposal" columnName="service_charge_method"/>
+      <columnExists tableName="proposal" columnName="repayment_mode"/>
+      <columnExists tableName="proposal" columnName="tenure_duration_in_months"/>
+      <columnExists tableName="proposal" columnName="purpose_of_submission"/>
+      <columnExists tableName="proposal" columnName="disbursement_criteria"/>
+      <columnExists tableName="proposal" columnName="credit_information_report_status"/>
+      <columnExists tableName="proposal" columnName="income_from_the_account"/>
+      <columnExists tableName="proposal" columnName="borrower_information"/>
+    </preConditions>
+    <dropColumn tableName="proposal" columnName="base_rate"/>
+    <dropColumn tableName="proposal" columnName="cib_charge"/>
+    <dropColumn tableName="proposal" columnName="proposed_limit"/>
+    <dropColumn tableName="proposal" columnName="interest_rate"/>
+    <dropColumn tableName="proposal" columnName="premium_rate_on_base_rate"/>
+    <dropColumn tableName="proposal" columnName="service_charge"/>
+    <dropColumn tableName="proposal" columnName="service_charge_method"/>
+    <dropColumn tableName="proposal" columnName="repayment_mode"/>
+    <dropColumn tableName="proposal" columnName="tenure_duration_in_months"/>
+    <dropColumn tableName="proposal" columnName="purpose_of_submission"/>
+    <dropColumn tableName="proposal" columnName="disbursement_criteria"/>
+    <dropColumn tableName="proposal" columnName="credit_information_report_status"/>
+    <dropColumn tableName="proposal" columnName="income_from_the_account"/>
+    <dropColumn tableName="proposal" columnName="borrower_information"/>
+    <addColumn tableName="proposal">
+      <column name="path" type="VARCHAR(256)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="40-drop-proposal-to-json" author="Aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="proposal" columnName="path"/>
+    </preConditions>
+    <dropColumn tableName="proposal" columnName="path"/>
+  </changeSet>
+
+  <changeSet id="40-add-proposal-to-json" author="Aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="proposal" columnName="data"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="proposal">
+      <column name="data" type="LONGTEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="40-add-proposal-proposal_limit" author="Aabishkar">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="proposal" columnName="proposal_limit"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="proposal">
+      <column name="proposed_limit" type="DECIMAL"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="46-alter-legal-status" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="legal_status" columnName="company_name"/>
+    </preConditions>
+    <dropColumn tableName="legal_status" columnName="company_name"/>
+  </changeSet>
+
+  <changeSet id="46-alter-legal-status-pan-number" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="legal_status" columnName="pan_number"/>
+    </preConditions>
+    <dropColumn tableName="legal_status" columnName="pan_number"/>
+  </changeSet>
+
+  <changeSet id="46-alter-legal-status-registration" author="yunish">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="legal_status" columnName="registration_no"/>
+    </preConditions>
+    <dropColumn tableName="legal_status" columnName="registration_no"/>
+  </changeSet>
+</databaseChangeLog>
