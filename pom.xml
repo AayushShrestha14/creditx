@@ -10,6 +10,7 @@
         <module>kb-web</module>
         <module>sb-report</module>
         <module>sb-cad</module>
+        <module>kb-admin</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

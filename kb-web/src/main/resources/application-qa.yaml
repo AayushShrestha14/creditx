@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://202.166.201.235:1433;database=creditx_migration
+    url: jdbc:sqlserver://202.166.201.235:1433;database=mega_test_old
     username: sa
     password: sbdb@141
   jpa:
