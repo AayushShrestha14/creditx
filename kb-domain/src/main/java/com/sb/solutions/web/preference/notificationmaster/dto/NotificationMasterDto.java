@@ -1,4 +1,4 @@
-package com.sb.solutions.web.preference.notificationMaster.dto;
+package com.sb.solutions.web.preference.notificationmaster.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

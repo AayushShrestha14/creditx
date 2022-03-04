@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class EmailConfigController {
     @Value("${bank.affiliateId}")
     private String affiliateId;
 
-    static final String URL = "/v1/email-config";
+    static final String URL = "/v1/admin/email-config";
 
     private static final Logger logger = LoggerFactory.getLogger(EmailConfigController.class);
 

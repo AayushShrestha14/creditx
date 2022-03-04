@@ -7,7 +7,7 @@
     <modules>
         <module>kb-core</module>
         <module>kb-api</module>
-        <module>kb-web</module>
+        <module>kb-domain</module>
         <module>sb-report</module>
         <module>sb-cad</module>
         <module>kb-admin</module>

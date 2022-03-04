@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,9 +49,11 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/oauth/token")
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
+                .authorizeRequests();
+
+        expressionInterceptUrlRegistry  = setUpPermissions(expressionInterceptUrlRegistry);
+        expressionInterceptUrlRegistry.antMatchers("/oauth/token")
                 .permitAll()
                 .antMatchers("/v1/users/register")
                 .permitAll()
@@ -95,6 +98,80 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
     }
 
+    private ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry setUpPermissions(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry) {
+        expressionInterceptUrlRegistry
+                .antMatchers(HttpMethod.POST,"/v1/admin/email-config")
+                .hasAuthority("email_config_update")
+                .antMatchers(HttpMethod.GET,"/v1/admin/email-config/all")
+                .hasAuthority("email_config_list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/email-config/test")
+                .hasAuthority("email_config_test")
+                .antMatchers(HttpMethod.POST,"/v1/admin/base-interest/list")
+                .hasAuthority("base_interest_list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/base-interest/all")
+                .hasAuthority("base_interest_all")
+                .antMatchers(HttpMethod.GET,"/v1/admin/base-interest/{id}")
+                .hasAuthority("base_interest_id")
+                .antMatchers(HttpMethod.PUT,"/v1/admin/base-interest/{id}")
+                .hasAuthority("base_interest_update")
+                .antMatchers(HttpMethod.POST,"/v1/admin/base-interest")
+                .hasAuthority("base_interest_save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/base-interest/active")
+                .hasAuthority("base_interest_active")
+                .antMatchers(HttpMethod.POST,"/v1/admin/nepse-company")
+                .hasAuthority("nepse-company_save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/nepse-company/list")
+                .hasAuthority("nepse-company_list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/nepse-company/uploadNepseFile")
+                .hasAuthority("nepse-company_file")
+                .antMatchers(HttpMethod.GET,"/v1/admin/nepse-company/statusCount")
+                .hasAuthority("nepse-company_count")
+                .antMatchers(HttpMethod.POST,"/v1/admin/nepse-company/share")
+                .hasAuthority("nepse-company-share-save")
+                .antMatchers(HttpMethod.GET,"/v1/admin/nepse-company/share")
+                .hasAuthority("nepse-company-share-get")
+                .antMatchers(HttpMethod.GET,"/v1/admin/nepse-company/share/list")
+                .hasAuthority("nepse-company-share-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/nepse-company/share/{id}")
+                .hasAuthority("nepse-company-share-id")
+                .antMatchers(HttpMethod.GET,"/v1/admin/blacklist/all")
+                .hasAuthority("blacklist_list-list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/blacklist/list")
+                .hasAuthority("blacklist_list-list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/blacklist/uploadBlackList")
+                .hasAuthority("blacklist_list-file")
+                .antMatchers(HttpMethod.POST,"/v1/admin/notification-master")
+                .hasAuthority("notification-master-save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/notification-master/one")
+                .hasAuthority("notification-maseter-get")
+                .antMatchers(HttpMethod.GET,"/v1/admin/notification-master/all")
+                .hasAuthority("notification-master-list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/notification-master/status")
+                .hasAuthority("notification-master-status")
+                .antMatchers(HttpMethod.POST,"/v1/admin/fiscal-year")
+                .hasAuthority("fiscal-year-save")
+                .antMatchers(HttpMethod.GET,"/v1/admin/fiscal-year/all")
+                .hasAuthority("fiscal-year-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/fiscal-year/{id}")
+                .hasAuthority("fiscal-year-get")
+                .antMatchers(HttpMethod.POST,"/v1/admin/fiscal-year/list")
+                .hasAuthority("fiscal-year-list")
+                .antMatchers(HttpMethod.POST,"/v1/admin/approval-limit")
+                .hasAuthority("approval-limit-save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/approval-limit/list")
+                .hasAuthority("approval-limit-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/approval-limit/{id}/{loanCategory}/role")
+                .hasAuthority("approval-limit-get")
+
+
+
+
+
+
+
+               ;
+        return expressionInterceptUrlRegistry;
+    }
 
 
 }
