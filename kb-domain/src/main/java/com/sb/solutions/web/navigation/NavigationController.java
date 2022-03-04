@@ -77,7 +77,8 @@ public class NavigationController {
     public ResponseEntity<?> getMenu() {
         User u = userService.getAuthenticatedUser();
         List<RolePermissionRights> rolePermissionRights = rolePermissionRightService
-            .getByRoleId(u.getRole().getId());
+            .getMenuByRoleId(u.getRole().getId());
+
           /*
         Beside admin user, no other user can set question for eligibility
         below logic is to guard

@@ -98,4 +98,9 @@ public class RolePermissionRightServiceImpl implements RolePermissionRightServic
 
         rolePermissionRightRepository.saveAll(rolePermissionRightsList1);
     }
+
+    @Override
+    public List<RolePermissionRights> getMenuByRoleId(Long id) {
+        return rolePermissionRightRepository.findByRoleVisible(id);
+    }
 }

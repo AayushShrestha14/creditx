@@ -34,6 +34,8 @@ public class Permission {
     private Long orders;
     private Status status = Status.ACTIVE;
 
+    private Boolean visible=true;
+
     @OneToMany
     private List<SubNav> subNavs;
 

@@ -24,6 +24,12 @@ public interface RolePermissionRightRepository extends JpaRepository<RolePermiss
         + " order by p.permission.orders ASC ")
     List<RolePermissionRights> findByRole(@Param("id") Long id);
 
+    @Query("Select p from RolePermissionRights p"
+            + " where p.role.id=:id and p.role.status=1 AND p.permission.status=1 AND p.permission.visible = true"
+            + " order by p.permission.orders ASC ")
+    List<RolePermissionRights> findByRoleVisible(Long id);
+
+
     @Transactional
     @Modifying
     @Query(value = "delete from role_permission_rights where role_id=:id and permission_id=:pid",
@@ -33,4 +39,5 @@ public interface RolePermissionRightRepository extends JpaRepository<RolePermiss
 
     @Query("SELECT r.apiRights FROM RolePermissionRights r where r.role.id =:role ")
     List<UrlApi> permsRight(@Param("role") Long role);
+
 }

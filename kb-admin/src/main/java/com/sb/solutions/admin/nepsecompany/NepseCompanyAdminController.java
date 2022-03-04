@@ -28,12 +28,12 @@ import java.io.IOException;
 @RestController
 @Validated
 @RequestMapping(value = "/v1/admin/nepse-company")
-public class NepseCompanyController {
+public class NepseCompanyAdminController {
 
     private final NepseCompanyService nepseCompanyService;
     private final NepseMasterService nepseMasterService;
 
-    public NepseCompanyController(
+    public NepseCompanyAdminController(
             @Autowired NepseCompanyService nepseCompanyService,
             @Autowired NepseMasterService nepseMasterService) {
         this.nepseCompanyService = nepseCompanyService;

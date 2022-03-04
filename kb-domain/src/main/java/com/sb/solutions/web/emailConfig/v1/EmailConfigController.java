@@ -34,7 +34,7 @@ public class EmailConfigController {
     @Value("${bank.affiliateId}")
     private String affiliateId;
 
-    static final String URL = "/v1/admin/email-config";
+    static final String URL = "/v1/email-config";
 
     private static final Logger logger = LoggerFactory.getLogger(EmailConfigController.class);
 

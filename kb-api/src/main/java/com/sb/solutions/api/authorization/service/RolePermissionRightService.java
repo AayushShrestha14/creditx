@@ -14,5 +14,5 @@ public interface RolePermissionRightService extends BaseService<RolePermissionRi
 
     void saveList(List<RolePermissionRights> rolePermissionRightsList);
 
-
+    List<RolePermissionRights> getMenuByRoleId(Long id);
 }

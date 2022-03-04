@@ -17,15 +17,15 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(FiscalYearController.URL)
-public class FiscalYearController {
+@RequestMapping(FiscalYearAdminController.URL)
+public class FiscalYearAdminController {
     static final String URL = "/v1/admin/fiscal-year";
 
-    private static final Logger logger = LoggerFactory.getLogger(FiscalYearController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FiscalYearAdminController.class);
 
     private final FiscalYearService fiscalYearService;
 
-    public FiscalYearController(
+    public FiscalYearAdminController(
         FiscalYearService fiscalYearService) {
         this.fiscalYearService = fiscalYearService;
     }

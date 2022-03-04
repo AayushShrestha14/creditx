@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,8 +20,8 @@ import javax.validation.Valid;
  */
 
 @RestController
-@RequestMapping(EmailConfigController.URL)
-public class EmailConfigController {
+@RequestMapping(EmailConfigAdminController.URL)
+public class EmailConfigAdminController {
 
     @Value("${bank.name}")
     private String bankName;
@@ -31,14 +30,14 @@ public class EmailConfigController {
 
     static final String URL = "/v1/admin/email-config";
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailConfigController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailConfigAdminController.class);
 
     private final EmailConfigService emailConfigService;
 
     private final MailThreadService mailThreadService;
 
-    public EmailConfigController(@Autowired EmailConfigService emailConfigService,
-                                 @Autowired MailThreadService mailThreadService) {
+    public EmailConfigAdminController(@Autowired EmailConfigService emailConfigService,
+                                      @Autowired MailThreadService mailThreadService) {
         this.emailConfigService = emailConfigService;
         this.mailThreadService = mailThreadService;
     }

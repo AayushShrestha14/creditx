@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sb.solutions.api.preference.notificationMaster.entity.NotificationMaster;
 import com.sb.solutions.api.preference.notificationMaster.service.NotificationMasterService;
 import com.sb.solutions.core.dto.RestResponseDto;
-import com.sb.solutions.web.preference.notificationmaster.dto.NotificationMasterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/admin/notification-master")
-public class NotificationMasterController {
+public class NotificationMasterAdminController {
 
     private final NotificationMasterService service;
 
-    public NotificationMasterController(
+    public NotificationMasterAdminController(
         @Autowired NotificationMasterService service) {
         this.service = service;
     }
@@ -42,7 +41,7 @@ public class NotificationMasterController {
     }
 
     @PostMapping("/status")
-    public ResponseEntity<?> updateStatus(@RequestBody NotificationMasterDto dto) {
+    public ResponseEntity<?> updateStatus(@RequestBody NotificationMasterAdminDto dto) {
         NotificationMaster master = service.findOne(dto.getId()).orElse(null);
         if (master == null) {
             return new RestResponseDto().failureModel(HttpStatus.NOT_FOUND, "Not found!!!");

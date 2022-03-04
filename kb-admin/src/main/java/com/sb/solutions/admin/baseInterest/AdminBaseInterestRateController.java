@@ -20,12 +20,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin/base-interest")
-public class BaseInterestRateController {
+public class AdminBaseInterestRateController {
 
     private final BaseInterestService baseInterestService;
 
     @Autowired
-    public BaseInterestRateController(BaseInterestService baseInterestService) {
+    public AdminBaseInterestRateController(BaseInterestService baseInterestService) {
         this.baseInterestService = baseInterestService;
     }
 

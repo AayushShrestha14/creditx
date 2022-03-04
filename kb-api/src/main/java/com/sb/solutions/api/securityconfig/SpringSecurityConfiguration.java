@@ -70,7 +70,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1/address/district").permitAll()
                 .antMatchers(HttpMethod.POST, "/v1/customer-otp").permitAll()
                 .antMatchers(HttpMethod.POST, "/v1/customer-otp/verify").permitAll()
-                .antMatchers(HttpMethod.POST, "/v1/customer-otp/regenerate").permitAll()
+                .antMatchers(HttpMethod.POST, "/v1/customer-otp/regeanerate").permitAll()
                 .antMatchers("/v1/accountType/all").permitAll()
                 .antMatchers("/v1/accountCategory/all").permitAll()
                 .antMatchers(HttpMethod.GET, "/v1/accountCategory/accountType/*").permitAll()

@@ -16,13 +16,13 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/v1/admin/permission")
-public class PermissionController {
+public class PermissionAdminController {
 
     private final PermissionService permissionService;
 
     private final UserService userService;
 
-    public PermissionController(
+    public PermissionAdminController(
         @Autowired PermissionService permissionService,
         @Autowired UserService userService) {
 

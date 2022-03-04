@@ -21,10 +21,10 @@ import java.util.List;
 @RestController
 @Validated
 @RequestMapping("/v1/admin/blacklist")
-public class BlackListController {
+public class BlackListAdminController {
     private final BlackListService blackListService;
 
-    public BlackListController(
+    public BlackListAdminController(
             @Autowired BlackListService blackListService) {
         this.blackListService = blackListService;
     }

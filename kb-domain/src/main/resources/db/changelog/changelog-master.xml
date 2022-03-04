@@ -7273,6 +7273,17 @@
             </column>
         </createTable>
     </changeSet>
+    
+    <changeSet id="442-change-permission-visible" author="abishek">
+        <preConditions  onFail="MARK_RAN">
+            <not>
+             <columnExists tableName="permission" columnName="visible" />
+            </not>
+        </preConditions>
+        <addColumn tableName="permission">
+            <column name="visible" type="boolean" defaultValue="true"> </column>
+        </addColumn>
+    </changeSet>
 
 
 </databaseChangeLog>

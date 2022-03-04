@@ -1,5 +1,6 @@
 package com.sb.solutions.admin.loanconfiguration;
 
+import com.sb.solutions.admin.loanconfiguration.mapper.EligibilityLoanAdminConfigMapper;
 import com.sb.solutions.api.approvallimit.emuns.LoanApprovalType;
 import com.sb.solutions.api.loanConfig.entity.LoanConfig;
 import com.sb.solutions.api.loanConfig.service.LoanConfigService;
@@ -7,8 +8,6 @@ import com.sb.solutions.core.dto.RestResponseDto;
 import com.sb.solutions.core.dto.SearchDto;
 import com.sb.solutions.core.enums.Status;
 import com.sb.solutions.core.utils.PaginationUtils;
-import com.sb.solutions.web.eligibility.v1.loanconfig.dto.LoanConfigDto;
-import com.sb.solutions.web.eligibility.v1.loanconfig.mapper.EligibilityLoanConfigMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.slf4j.Logger;
@@ -25,17 +24,17 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1/admin/loan-configs")
-public class LoanConfigController {
+public class LoanConfigAdminController {
 
-    private final Logger logger = LoggerFactory.getLogger(LoanConfigController.class);
+    private final Logger logger = LoggerFactory.getLogger(LoanConfigAdminController.class);
 
     private LoanConfigService loanConfigService;
 
-    private EligibilityLoanConfigMapper eligibilityLoanConfigMapper;
+    private EligibilityLoanAdminConfigMapper eligibilityLoanConfigMapper;
 
-    public LoanConfigController(
+    public LoanConfigAdminController(
         @Autowired LoanConfigService loanConfigService,
-        @Autowired EligibilityLoanConfigMapper eligibilityLoanConfigMapper
+        @Autowired EligibilityLoanAdminConfigMapper eligibilityLoanConfigMapper
     ) {
         this.loanConfigService = loanConfigService;
         this.eligibilityLoanConfigMapper = eligibilityLoanConfigMapper;
@@ -90,16 +89,16 @@ public class LoanConfigController {
         logger.debug("Request to get the Loan configs activated for eligibility.");
         final List<LoanConfig> loanConfigs = loanConfigService
             .getLoanConfigsActivatedForEligibility();
-        final List<LoanConfigDto> loanConfigDtoList = eligibilityLoanConfigMapper
+        final List<LoanConfigAdminDto> loanConfigAdminDtoList = eligibilityLoanConfigMapper
             .mapEntitiesToDtos(loanConfigs);
-        return new RestResponseDto().successModel(loanConfigDtoList);
+        return new RestResponseDto().successModel(loanConfigAdminDtoList);
     }
 
     @GetMapping(value = "/{loanConfigId}/eligibility")
     public ResponseEntity<?> getLoanOneForEligibility(@PathVariable Long loanConfigId) {
-        final LoanConfigDto loanConfigDto = eligibilityLoanConfigMapper
+        final LoanConfigAdminDto loanConfigAdminDto = eligibilityLoanConfigMapper
             .mapEntityToDto(loanConfigService.getLoanConfigActivatedForEligibility(loanConfigId));
-        return new RestResponseDto().successModel(loanConfigDto);
+        return new RestResponseDto().successModel(loanConfigAdminDto);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{loanCategory}/all")

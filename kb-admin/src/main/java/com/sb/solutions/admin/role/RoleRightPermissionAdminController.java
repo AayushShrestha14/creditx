@@ -20,9 +20,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin/roleRightPermission")
-public class RoleRightPermissionController {
+public class RoleRightPermissionAdminController {
 
-    private final Logger logger = LoggerFactory.getLogger(RoleRightPermissionController.class);
+    private final Logger logger = LoggerFactory.getLogger(RoleRightPermissionAdminController.class);
 
     private final RolePermissionRightService rolePermissionRightService;
 
@@ -30,7 +30,7 @@ public class RoleRightPermissionController {
 
     private final UserService userService;
 
-    public RoleRightPermissionController(
+    public RoleRightPermissionAdminController(
             @Autowired RolePermissionRightService rolePermissionRightService,
             @Autowired RightService rightService,
             UserService userService) {

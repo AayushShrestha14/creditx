@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin/role")
-public class RoleController {
+public class RoleAdminController {
 
     private final RoleService roleService;
 
@@ -33,7 +33,7 @@ public class RoleController {
 
     private final RolePermissionRightService rolePermissionRightService;
 
-    public RoleController(
+    public RoleAdminController(
             @Autowired RoleService roleService,
             @Autowired RoleHierarchyService roleHierarchyService, RolePermissionRightService rolePermissionRightService) {
         this.roleService = roleService;
@@ -116,4 +116,5 @@ public class RoleController {
     public ResponseEntity<?> getApproval() {
         return new RestResponseDto().successModel(roleService.getByRoleTypeAndStatus(RoleType.APPROVAL, Status.ACTIVE));
     }
+
 }

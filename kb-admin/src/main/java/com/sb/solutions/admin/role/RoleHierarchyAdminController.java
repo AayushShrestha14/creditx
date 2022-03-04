@@ -1,12 +1,12 @@
 package com.sb.solutions.admin.role;
 
+import com.sb.solutions.admin.role.dto.RoleHierarchyAdminDto;
+import com.sb.solutions.admin.role.mapper.RoleHierarchyAdminMapper;
 import com.sb.solutions.api.authorization.entity.RoleHierarchy;
 import com.sb.solutions.api.authorization.service.RoleHierarchyService;
 import com.sb.solutions.api.user.entity.User;
 import com.sb.solutions.api.user.service.UserService;
 import com.sb.solutions.core.dto.RestResponseDto;
-import com.sb.solutions.web.user.dto.RoleHierarchyDto;
-import com.sb.solutions.web.user.mapper.RoleHierarchyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +21,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin/role-hierarchy")
-public class RoleHierarchyController {
+public class RoleHierarchyAdminController {
 
-    private final Logger logger = LoggerFactory.getLogger(RoleHierarchyController.class);
+    private final Logger logger = LoggerFactory.getLogger(RoleHierarchyAdminController.class);
 
-    private final RoleHierarchyMapper roleHierarchyMapper;
+    private final RoleHierarchyAdminMapper roleHierarchyMapper;
 
     private final RoleHierarchyService roleHierarchyService;
 
     private final UserService userService;
 
-    public RoleHierarchyController(
-        @Autowired RoleHierarchyMapper roleHierarchyMapper,
+    public RoleHierarchyAdminController(
+        @Autowired RoleHierarchyAdminMapper roleHierarchyMapper,
         @Autowired RoleHierarchyService roleHierarchyService,
         @Autowired UserService userService) {
         this.roleHierarchyMapper = roleHierarchyMapper;
@@ -43,14 +43,14 @@ public class RoleHierarchyController {
 
     @PostMapping
     public ResponseEntity<?> saveRoleHierarchyList(
-        @RequestBody List<RoleHierarchyDto> roleHierarchyDtoList) {
+        @RequestBody List<RoleHierarchyAdminDto> roleHierarchyAdminDtoList) {
         final List<RoleHierarchy> roleHierarchies = roleHierarchyService
-            .saveList(roleHierarchyMapper.mapDtosToEntities(roleHierarchyDtoList));
+            .saveList(roleHierarchyMapper.mapDtosToEntities(roleHierarchyAdminDtoList));
 
         if (roleHierarchies.isEmpty()) {
-            logger.error("Error while saving Role_Hierarchy {}", roleHierarchyDtoList);
+            logger.error("Error while saving Role_Hierarchy {}", roleHierarchyAdminDtoList);
             return new RestResponseDto()
-                .failureModel("Error occurred while saving Role_Hierarchy " + roleHierarchyDtoList);
+                .failureModel("Error occurred while saving Role_Hierarchy " + roleHierarchyAdminDtoList);
         }
         return new RestResponseDto()
             .successModel(roleHierarchyMapper.mapEntitiesToDtos(roleHierarchies));
