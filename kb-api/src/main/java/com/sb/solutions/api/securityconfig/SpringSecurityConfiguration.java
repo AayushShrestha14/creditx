@@ -215,9 +215,26 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasAuthority("loan-configs-get")
                 .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/{loanCategory}/all")
                 .hasAuthority("loan-configs-get")
-
-
-
+                .antMatchers(HttpMethod.POST,"/v1/admin/accountType")
+                .hasAuthority("account-type-save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/accountType/list")
+                .hasAuthority("account-type-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/accountType/{id}")
+                .hasAuthority("account-type-get")
+                .antMatchers(HttpMethod.GET,"/v1/admin/accountType/all")
+                .hasAuthority("account-type-list")
+                .antMatchers(HttpMethod.PUT,"/v1/admin/accountType/{id}")
+                .hasAuthority("account-type-update")
+                .antMatchers(HttpMethod.POST,"/v1/admin/accountCategory")
+                .hasAuthority("account-category-save")
+                .antMatchers(HttpMethod.POST,"/v1/admin/accountCategory/list")
+                .hasAuthority("account-category-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/accountCategory/all")
+                .hasAuthority("account-category-list")
+                .antMatchers(HttpMethod.GET,"/v1/admin/accountCategory/accountType/{accountTypeId}")
+                .hasAuthority("account-category-get")
+                .antMatchers(HttpMethod.PUT,"/v1/admin/accountCategory/{id}")
+                .hasAuthority("account-category-get")
 
                 ;
         return expressionInterceptUrlRegistry;
