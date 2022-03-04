@@ -163,19 +163,19 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasAuthority("approval-limit-get")
                 .antMatchers(HttpMethod.POST, "/v1/admin/role")
                 .hasAuthority("role-save")
-                .antMatchers(HttpMethod.GET, "/v1/admin/all")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/all")
                 .hasAuthority("role-list")
-                .antMatchers(HttpMethod.POST, "/v1/admin/edit")
+                .antMatchers(HttpMethod.POST, "/v1/admin/role/edit")
                 .hasAuthority("role-update")
-                .antMatchers(HttpMethod.GET, "/v1/admin/{id}")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/{id}")
                 .hasAuthority("role-get")
-                .antMatchers(HttpMethod.GET, "/v1/admin/statusCount")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/statusCount")
                 .hasAuthority("role-get")
-                .antMatchers(HttpMethod.GET, "/v1/admin/active")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/active")
                 .hasAuthority("role-get")
-                .antMatchers(HttpMethod.GET, "/v1/admin/maker")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/maker")
                 .hasAuthority("role-get")
-                .antMatchers(HttpMethod.GET, "/v1/admin/getApproval")
+                .antMatchers(HttpMethod.GET, "/v1/admin/role/getApproval")
                 .hasAuthority("role-save")
                 .antMatchers(HttpMethod.POST, "/v1/admin/roleRightPermission")
                 .hasAuthority("role-right-permission-save")
@@ -196,8 +196,30 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/v1/admin/role-hierarchy/getForward")
                 .hasAuthority("role-hierarchy-get")
                 .antMatchers(HttpMethod.GET, "/v1/admin/role-hierarchy/getBackward")
-                .hasAuthority("role-hierarchy-get");
+                .hasAuthority("role-hierarchy-get")
+                .antMatchers(HttpMethod.POST, "/v1/admin/loan-configs")
+                .hasAuthority("loan-configs-save")
+                .antMatchers(HttpMethod.POST, "/v1/admin/loan-configs/list")
+                .hasAuthority("loan-configs-list")
+                .antMatchers(HttpMethod.POST, "/v1/admin/loan-configs/statusCount")
+                .hasAuthority("loan-configs-get")
+                .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/statusCount")
+                .hasAuthority("loan-configs-list")
+                .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/{id}")
+                .hasAuthority("loan-configs-get")
+                .antMatchers(HttpMethod.POST, "/v1/admin/loan-configs/status")
+                .hasAuthority("loan-configs-get")
+                .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/all/eligibility")
+                .hasAuthority("loan-configs-get")
+                .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/{loanConfigId}/eligibility")
+                .hasAuthority("loan-configs-get")
+                .antMatchers(HttpMethod.GET, "/v1/admin/loan-configs/{loanCategory}/all")
+                .hasAuthority("loan-configs-get")
 
+
+
+
+                ;
         return expressionInterceptUrlRegistry;
     }
 
