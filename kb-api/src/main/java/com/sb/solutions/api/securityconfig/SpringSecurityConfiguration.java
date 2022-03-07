@@ -50,7 +50,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests();
-        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/v1/admin/*")
+        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/v1/admin/**")
                 .permitAll();
         expressionInterceptUrlRegistry = setUpPermissions(expressionInterceptUrlRegistry);
         expressionInterceptUrlRegistry.antMatchers("/oauth/token")
@@ -95,6 +95,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.cors();
     }
 
