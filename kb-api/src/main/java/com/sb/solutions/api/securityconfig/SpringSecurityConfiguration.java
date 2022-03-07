@@ -50,7 +50,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests();
-        expressionInterceptUrlRegistry.antMatchers("/v1/admin/*")
+        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/v1/admin/*")
                 .permitAll();
         expressionInterceptUrlRegistry = setUpPermissions(expressionInterceptUrlRegistry);
         expressionInterceptUrlRegistry.antMatchers("/oauth/token")
